@@ -125,8 +125,11 @@
 }
 
 @media (max-width: 768px) {
-  .card-actions { opacity: 1; transform: translateX(0); }
-  .card-name { font-size: 1rem; }
+  .card-actions { opacity: 1; transform: translateX(0); top: 0.5rem; right: 0.5rem; gap: 0.4rem; }
+  .card-badges { top: 0.5rem; left: 0.5rem; }
+  .card-body { padding: 0.75rem 0.75rem 1rem; }
+  .card-name { font-size: 0.95rem; margin-bottom: 0.4rem; }
   .price-original, .price-sale { font-size: 1rem; }
-  .action-btn { width: 38px; height: 38px; svg { width: 18px; height: 18px; } }
+  .action-btn { width: 34px; height: 34px; svg { width: 16px; height: 16px; } }
+  .card-collection, .card-gender { font-size: 0.65rem; }
 }
