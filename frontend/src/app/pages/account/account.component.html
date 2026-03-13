@@ -1,0 +1,48 @@
+<div class="account-page">
+  <div class="container">
+    <div class="account-header">
+      <span class="section-label">User Dashboard</span>
+      <h1 class="section-title">My Account</h1>
+    </div>
+
+    <div class="account-grid" *ngIf="user">
+      <!-- Profile Section -->
+      <div class="profile-card">
+        <h3>Profile</h3>
+        <div class="profile-info">
+          <div class="info-item">
+            <label>Name</label>
+            <span>{{ user.firstName }} {{ user.lastName }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email Address</label>
+            <span>{{ user.email }}</span>
+          </div>
+          <div class="info-item">
+            <label>Account Role</label>
+            <span>{{ user.role }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Section -->
+      <div class="orders-card">
+        <h3>Recent Orders</h3>
+        <div *ngIf="orders.length > 0">
+          <div *ngFor="let o of orders" class="order-item">
+            <div class="order-details">
+              <span class="order-id">Order #{{ o.id }}</span>
+              <span class="order-status">{{ o.status }}</span>
+              <p class="order-total">Total: ${{ o.total | number:'1.2-2' }}</p>
+            </div>
+            <a [routerLink]="['/account/orders', o.id]" class="btn btn-outline btn-sm">View Details</a>
+          </div>
+        </div>
+        <div *ngIf="orders.length === 0" class="no-orders">
+          <p>You haven't placed any orders yet.</p>
+          <a routerLink="/shop" class="btn btn-green btn-sm" style="margin-top: 1rem;">Start Shopping</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

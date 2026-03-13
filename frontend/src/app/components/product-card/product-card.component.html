@@ -1,0 +1,30 @@
+<div class="product-card" (click)="navigate()">
+  <div class="card-image">
+    <img [src]="product.images[0] || 'assets/placeholder.jpg'" [alt]="product.name" loading="lazy">
+    <div class="card-badges">
+      <span class="badge badge-sale" *ngIf="product.salePrice">Sale</span>
+      <span class="badge badge-new" *ngIf="product.newArrival">New</span>
+    </div>
+    <div class="card-actions">
+      <button class="action-btn" (click)="toggleWishlist($event)" [class.wishlisted]="inWishlist" title="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" [attr.fill]="inWishlist ? '#C0603A' : 'none'"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="card-collection">{{ product.collectionName }}</span>
+      <span class="card-gender">{{ product.gender }}</span>
+    </div>
+    <h3 class="card-name">{{ product.name }}</h3>
+    <div class="card-rating" *ngIf="product.reviewCount > 0">
+      <app-star-rating [rating]="product.rating"></app-star-rating>
+      <span class="review-count">({{ product.reviewCount }})</span>
+    </div>
+    <div class="card-price">
+      <span class="price-sale" *ngIf="product.salePrice">${{ product.salePrice.toFixed(2) }}</span>
+      <span class="price-original" [class.struck]="product.salePrice">${{ product.price.toFixed(2) }}</span>
+    </div>
+  </div>
+</div>

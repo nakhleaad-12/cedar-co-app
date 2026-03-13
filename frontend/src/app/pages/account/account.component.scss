@@ -1,0 +1,112 @@
+.account-page {
+  padding-top: 120px;
+  padding-bottom: 80px;
+  min-height: 80vh;
+  background: var(--ivory);
+}
+
+.account-header {
+  margin-bottom: 3rem;
+  h1 { font-weight: 900; }
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2.5rem;
+  
+  @media(max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card, .orders-card {
+  background: var(--white);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--midnight);
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem; left: 0;
+      width: 2rem; height: 4px;
+      background: var(--lebanese-red);
+      border-radius: 50px;
+    }
+  }
+}
+
+.profile-info {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    
+    label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-weight: 700;
+      margin: 0;
+    }
+    span {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--midnight);
+    }
+  }
+}
+
+.order-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition);
+  
+  &:last-child { border-bottom: none; }
+  
+  .order-details {
+    .order-id {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--midnight);
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+    .order-status {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--lebanese-green);
+    }
+  }
+  
+  .order-total {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--midnight);
+  }
+}
+
+.no-orders {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--muted);
+  font-weight: 600;
+}

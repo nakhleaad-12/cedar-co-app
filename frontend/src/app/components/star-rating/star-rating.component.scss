@@ -1,0 +1,7 @@
+.stars { display: inline-flex; gap: 1px; }
+.star {
+  font-size: 0.9rem;
+  color: var(--border);
+  &.filled { color: var(--gold); }
+  &.half { color: var(--gold); opacity: 0.6; }
+}

@@ -1,0 +1,33 @@
+<div class="shop-page">
+  <div class="shop-header section" style="padding-bottom: 2rem;">
+    <div class="container">
+      <span class="section-label">Cedar &amp; Co.</span>
+      <h1 class="section-title">Shop All</h1>
+    </div>
+  </div>
+  <div class="container shop-layout">
+    <!-- Sort Bar -->
+    <div class="sort-bar">
+      <span class="results-count">{{ totalProducts }} products</span>
+      <select [(ngModel)]="sortBy" (change)="onSort()">
+        <option value="newest">Newest First</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+    <!-- Products -->
+    <div class="products-grid" *ngIf="products.length > 0">
+      <app-product-card *ngFor="let p of products" [product]="p"></app-product-card>
+    </div>
+    <div class="loading-row" *ngIf="loading">
+      <div class="spinner"></div>
+    </div>
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button class="btn btn-outline btn-sm" [disabled]="currentPage === 0" (click)="goTo(currentPage - 1)">← Prev</button>
+      <span>{{ currentPage + 1 }} / {{ totalPages }}</span>
+      <button class="btn btn-outline btn-sm" [disabled]="currentPage + 1 >= totalPages" (click)="goTo(currentPage + 1)">Next →</button>
+    </div>
+  </div>
+</div>

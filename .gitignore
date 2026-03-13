@@ -1,0 +1,17 @@
+node_modules/
+target/
+.idea/
+.vscode/
+.DS_Store
+.env
+dist/
+uploads/
+tmp/
+brain/
+**/target/
+**/node_modules/
+**/dist/
+**/uploads/
+**/*.class
+**/*.jar
+**/*.war

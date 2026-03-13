@@ -1,0 +1,96 @@
+<!-- Hero Banner -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container hero-content">
+    <span class="hero-tag">Spring / Summer 2025</span>
+    <h1>Woven from the<br><em>Land of Cedars</em></h1>
+    <p class="hero-subtitle">Premium Lebanese fashion celebrating authentic artisan heritage with modern design.</p>
+    <div class="hero-cta">
+      <a routerLink="/shop" class="btn btn-green">Explore Collection</a>
+      <a routerLink="/about" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color:#fff;">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span></span>
+  </div>
+</section>
+
+<!-- Collections Banner -->
+<section class="section collections-preview">
+  <div class="container">
+    <span class="section-label">Collections</span>
+    <h2 class="section-title">Explore Our World</h2>
+    <div class="collections-grid">
+      <a *ngFor="let c of collections" routerLink="/collections" class="collection-card">
+        <span class="collection-season">{{ c.season }}</span>
+        <span class="collection-name">{{ c.name }}</span>
+        <span class="collection-desc">{{ c.description }}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- New Arrivals -->
+<section class="section new-arrivals">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-label">Just Arrived</span>
+        <h2 class="section-title">New Arrivals</h2>
+      </div>
+      <a routerLink="/shop" class="btn btn-outline">View All</a>
+    </div>
+    <div class="products-grid" *ngIf="newArrivals.length > 0; else loadingBlock">
+      <app-product-card *ngFor="let p of newArrivals" [product]="p"></app-product-card>
+    </div>
+  </div>
+</section>
+
+<!-- Editorial Banner -->
+<section class="editorial-banner">
+  <div class="editorial-content container">
+    <span class="section-label">The Cedar & Co. Story</span>
+    <h2>Fashion rooted in <em>heritage</em></h2>
+    <p>Every stitch carries the spirit of Lebanon — our mountains, our souks, our sea. We collaborate with local artisans to bring you fashion that is both modern and deeply rooted.</p>
+    <a routerLink="/about" class="btn btn-primary">Discover Our Story</a>
+  </div>
+</section>
+
+<!-- Best Sellers -->
+<section class="section best-sellers">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-label">Fan Favourites</span>
+        <h2 class="section-title">Best Sellers</h2>
+      </div>
+      <a routerLink="/shop" class="btn btn-outline">Shop All</a>
+    </div>
+    <div class="products-grid" *ngIf="bestSellers.length > 0; else loadingBlock">
+      <app-product-card *ngFor="let p of bestSellers" [product]="p"></app-product-card>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section">
+  <div class="container newsletter-inner">
+    <div>
+      <span class="section-label" style="color: rgba(255,255,255,0.8)">Stay Connected</span>
+      <h2 class="section-title" style="color:#fff;">Get 15% off your first order</h2>
+      <p style="color: rgba(255,255,255,0.75)">Join our community and receive exclusive previews, curated stories, and early access to new collections.</p>
+    </div>
+    <form class="home-newsletter" (submit)="onSubscribe($event)">
+      <div class="newsletter-form-home">
+        <input type="email" placeholder="Enter your email address" [(ngModel)]="newsletterEmail" name="email">
+        <button class="btn btn-green" type="submit">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<ng-template #loadingBlock>
+  <div class="loading-row">
+    <div class="spinner"></div>
+  </div>
+</ng-template>

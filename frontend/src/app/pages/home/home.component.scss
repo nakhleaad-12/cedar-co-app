@@ -1,0 +1,196 @@
+// Hero
+.hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--lebanese-red);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(238,22,31,0.85), rgba(238,22,31,0.6)), url('https://images.unsplash.com/photo-1558171813-6951d7e716cf?w=1600') center/cover no-repeat;
+  opacity: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding-top: 120px;
+  padding-bottom: 100px;
+  max-width: 800px;
+  text-align: left;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(5px);
+  border-radius: 50px;
+}
+
+h1 {
+  color: #fff;
+  margin-bottom: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  em { color: var(--lebanese-green); font-style: normal; text-shadow: 0 0 20px rgba(0,168,80,0.4); }
+}
+
+.hero-subtitle {
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  max-width: 580px;
+  margin-bottom: 3.5rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.hero-cta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  span {
+    display: block;
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, #fff, transparent);
+    margin: 0 auto;
+    animation: scrollPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+}
+@keyframes scrollPulse { 0%,100% { transform: scaleY(0.4); opacity: 0.3; } 50% { transform: scaleY(1); opacity: 1; } }
+
+// Collections
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+  @media(max-width: 1100px) { grid-template-columns: repeat(3, 1fr); }
+  @media(max-width: 768px) { grid-template-columns: repeat(2, 1fr); }
+  @media(max-width: 500px) { grid-template-columns: 1fr; }
+}
+
+.collection-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 2.5rem 2rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--transition);
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--lebanese-red);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    .collection-name { color: var(--lebanese-red); }
+  }
+}
+
+.collection-season {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lebanese-green);
+}
+
+.collection-name {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--midnight);
+  transition: var(--transition);
+}
+
+.collection-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+// Editorial
+.editorial-banner {
+  background: var(--midnight);
+  padding: 120px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(238,22,31,0.08), transparent 60%);
+  }
+
+  h2 { color: #fff; margin-bottom: 2rem; font-weight: 900; em { color: var(--lebanese-green); font-style: normal; } }
+  p  { color: rgba(255,255,255,0.6); max-width: 650px; margin: 0 auto 3.5rem; font-size: 1.15rem; }
+}
+
+// Newsletter
+.newsletter-section {
+  background: var(--lebanese-red);
+  padding: 100px 0;
+  color: #fff;
+}
+
+.newsletter-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  @media(max-width: 768px) { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+}
+
+.home-newsletter {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  @media(max-width: 768px) { align-items: center; }
+  
+  .newsletter-form-home {
+    display: flex;
+    background: rgba(255,255,255,0.15);
+    padding: 0.5rem;
+    border-radius: 60px;
+    border: 1px solid rgba(255,255,255,0.25);
+    width: 100%;
+    max-width: 500px;
+    transition: var(--transition);
+    &:focus-within { background: rgba(255,255,255,0.25); }
+
+    input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.05rem;
+      &::placeholder { color: rgba(255,255,255,0.5); }
+      &:focus { box-shadow: none; }
+    }
+  }
+}
+
+.loading-row {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}

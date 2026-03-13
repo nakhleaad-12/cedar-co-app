@@ -1,0 +1,6 @@
+<span class="stars">
+  <span *ngFor="let s of stars; let i = index"
+        class="star"
+        [class.filled]="i < fullStars"
+        [class.half]="i === fullStars && hasHalf">★</span>
+</span>

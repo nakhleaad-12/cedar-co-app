@@ -1,0 +1,141 @@
+<div class="admin-page">
+  <div class="container">
+
+    <div class="admin-header">
+      <h1 class="section-title">Products</h1>
+      <div style="display:flex; gap:0.75rem; align-items:center;">
+        <span style="color:var(--muted); font-size:0.9rem;">{{ products.length }} products</span>
+        <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm">
+          {{ showCreateForm ? '✕ Cancel' : '+ New Product' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Create Form -->
+    <div class="create-panel" *ngIf="showCreateForm">
+      <h2>Create New Product</h2>
+      <div class="form-grid">
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Product Name *</label>
+          <input [(ngModel)]="form.name" (blur)="autoSlug()" placeholder="e.g. Hamra Linen Shirt">
+        </div>
+        <div class="form-group">
+          <label>Slug *</label>
+          <input [(ngModel)]="form.slug" placeholder="auto-filled from name">
+        </div>
+        <div class="form-group">
+          <label>SKU *</label>
+          <input [(ngModel)]="form.sku" placeholder="e.g. HDL-002">
+        </div>
+        <div class="form-group">
+          <label>Price (USD) *</label>
+          <input [(ngModel)]="form.price" type="number" min="0" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Sale Price (optional)</label>
+          <input [(ngModel)]="form.salePrice" type="number" min="0" placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select [(ngModel)]="form.gender">
+            <option value="MEN">Men</option>
+            <option value="WOMEN">Women</option>
+            <option value="UNISEX">Unisex</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sizes (comma-separated)</label>
+          <input [(ngModel)]="form.sizes" placeholder="S, M, L, XL">
+        </div>
+        <div class="form-group">
+          <label>Colors (comma-separated)</label>
+          <input [(ngModel)]="form.colors" placeholder="Black, White, Navy">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Image URL</label>
+          <input [(ngModel)]="form.imageUrl" placeholder="https://...">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Description</label>
+          <textarea [(ngModel)]="form.description" placeholder="Product description..."></textarea>
+        </div>
+        <div class="form-group" style="grid-column: span 3; display:flex; gap:1.5rem; align-items:center; flex-direction:row;">
+          <label style="display:flex; align-items:center; gap:0.4rem; text-transform:none; font-weight:500;">
+            <input type="checkbox" [(ngModel)]="form.featured"> Featured
+          </label>
+          <label style="display:flex; align-items:center; gap:0.4rem; text-transform:none; font-weight:500;">
+            <input type="checkbox" [(ngModel)]="form.newArrival"> New Arrival
+          </label>
+          <label style="display:flex; align-items:center; gap:0.4rem; text-transform:none; font-weight:500;">
+            <input type="checkbox" [(ngModel)]="form.bestSeller"> Best Seller
+          </label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" (click)="createProduct()" [disabled]="creating">
+          {{ creating ? 'Creating…' : 'Create Product' }}
+        </button>
+        <button class="btn btn-outline" (click)="showCreateForm = false; resetForm()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" *ngIf="loading">Loading products…</div>
+
+    <!-- Table -->
+    <div style="overflow-x:auto;" *ngIf="!loading">
+      <table class="products-table" *ngIf="products.length > 0; else emptyBlock">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>SKU</th>
+            <th>Price</th>
+            <th>Gender</th>
+            <th>Sizes</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of products">
+            <td>
+              <img class="thumb"
+                   [src]="p.images?.[0] || 'https://via.placeholder.com/48'"
+                   [alt]="p.name"
+                   onerror="this.src='https://via.placeholder.com/48'">
+            </td>
+            <td>
+              <strong>{{ p.name }}</strong>
+              <div style="font-size:0.76rem; color:var(--muted);">{{ p.slug }}</div>
+            </td>
+            <td><code style="font-size:0.78rem;">{{ p.sku }}</code></td>
+            <td>
+              <span *ngIf="!p.salePrice">${{ p.price?.toFixed(2) }}</span>
+              <span *ngIf="p.salePrice">
+                <s style="color:var(--muted); font-size:0.82rem;">${{ p.price?.toFixed(2) }}</s>
+                <strong style="color:#c0392b;"> ${{ p.salePrice?.toFixed(2) }}</strong>
+              </span>
+            </td>
+            <td>{{ p.gender }}</td>
+            <td style="font-size:0.8rem;">{{ p.sizes?.join(', ') || '—' }}</td>
+            <td>{{ totalStock(p) }}</td>
+            <td>
+              <span class="badge" [class.badge-active]="p.active !== false" [class.badge-inactive]="p.active === false">
+                {{ p.active !== false ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-danger" (click)="deleteProduct(p)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #emptyBlock>
+        <div class="empty">No products found.</div>
+      </ng-template>
+    </div>
+
+  </div>
+</div>

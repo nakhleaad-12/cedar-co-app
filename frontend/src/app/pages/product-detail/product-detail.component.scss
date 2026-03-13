@@ -1,0 +1,200 @@
+.product-detail { padding-top: 100px; padding-bottom: 5rem; }
+.detail-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; @media(max-width: 900px) { grid-template-columns: 1fr; gap: 2rem; } }
+.gallery-main { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 3/4; img { width:100%; height:100%; object-fit:cover; } .badge { position:absolute; top:1rem; left:1rem; } }
+.gallery-thumbs { display:flex; gap:0.75rem; margin-top:0.75rem; img { width:80px; height:80px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; transition:border-color 0.2s; &.active { border-color: var(--cedar); } } }
+.product-collection { font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--terracotta); }
+.product-name { font-size: 2rem; margin: 0.5rem 0; }
+.product-rating { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem; font-size:0.85rem; color:var(--muted); }
+.product-price { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
+.price-sale { font-size:1.5rem; font-weight:700; color:var(--terracotta); }
+.price-orig { font-size:1.3rem; font-weight:500; &.struck { text-decoration:line-through; color:var(--muted); font-size:1rem; } }
+.product-desc { color:var(--muted); line-height:1.8; margin-bottom:2rem; }
+.selector { margin-bottom:1.5rem; label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.6rem; } }
+.size-options,.color-options { display:flex; flex-wrap:wrap; gap:0.5rem; }
+.size-btn,.color-btn { padding:0.45rem 1rem; border:1.5px solid var(--border); border-radius:6px; background:#fff; font-family:var(--font-body); font-size:0.85rem; cursor:pointer; transition:var(--transition); &.selected { border-color:var(--midnight); background:var(--midnight); color:#fff; } &:hover { border-color:var(--cedar); } }
+.qty-row { display:flex; align-items:center; gap:1rem; margin-bottom:2rem; span { font-size:1.1rem; font-weight:600; min-width:2rem; text-align:center; } }
+.qty-btn { width:36px; height:36px; border:1.5px solid var(--border); border-radius:50%; background:#fff; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--transition); &:hover { border-color:var(--midnight); } }
+.actions-row { 
+  display: flex; 
+  gap: 1rem; 
+  margin-top: 2rem; 
+}
+
+/* Reviews Section Styles */
+.reviews-section {
+  padding-top: 4rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--border);
+}
+
+.reviews-header {
+  margin-bottom: 2.5rem;
+  h2 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+  .rating-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    .avg-score { font-size: 1.25rem; font-weight: 700; color: var(--midnight); }
+    .count-label { color: var(--muted); font-size: 0.9rem; }
+  }
+}
+
+.reviews-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4rem;
+  @media(max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.review-item {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  &:last-child { border-bottom: none; }
+  
+  .review-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    .review-user { font-weight: 600; color: var(--midnight); }
+    .review-date { font-size: 0.85rem; color: var(--muted); }
+  }
+
+  .review-title {
+    font-size: 1.1rem;
+    margin: 0.75rem 0 0.5rem;
+    color: var(--midnight);
+  }
+
+  .review-body {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  .verified-badge {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--lebanese-green);
+    background: rgba(0, 168, 80, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+}
+
+.review-form-box {
+  background: var(--ivory);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+
+  h3 { margin-bottom: 0.5rem; font-size: 1.4rem; }
+  .form-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.6rem; }
+}
+
+.rating-selector {
+  display: flex;
+  gap: 0.25rem;
+  .star-btn {
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover, &.active { color: #FFB800; transform: scale(1.1); }
+  }
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  &:focus { outline: none; border-color: var(--lebanese-red); box-shadow: 0 0 0 4px rgba(238,22,31,0.05); }
+}
+
+.submit-rev-btn {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cancel-btn {
+  padding: 1rem 1.5rem;
+}
+
+.review-actions {
+  display: flex;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  
+  .action-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--midnight);
+    cursor: pointer;
+    text-decoration: underline;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    &:hover { opacity: 1; color: var(--lebanese-red); }
+    &.delete:hover { color: #d9534f; }
+  }
+}
+
+.add-cart-btn { 
+  flex: 1; 
+  justify-content: center; 
+  padding: 1rem 2rem; 
+  font-size: 1rem; 
+}
+.wishlist-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--midnight);
+
+  svg { width: 24px; height: 24px; transition: transform 0.3s ease; }
+  &:hover {
+    border-color: var(--lebanese-red);
+    color: var(--lebanese-red);
+    background: rgba(238,22,31,0.05);
+    transform: translateY(-2px);
+    svg { transform: scale(1.1); }
+  }
+  &.active {
+    background: var(--lebanese-red);
+    border-color: var(--lebanese-red);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(238,22,31,0.3);
+  }
+}

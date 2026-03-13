@@ -1,0 +1,16 @@
+<div style="padding-top:100px; padding-bottom:5rem; min-height:70vh; background:var(--ivory);">
+  <div class="container">
+    <h1 class="section-title" style="margin-bottom:2rem;">Admin Dashboard</h1>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin-bottom:3rem;" *ngIf="stats">
+      <div class="stat-card" *ngFor="let s of statCards">
+        <span class="stat-label">{{ s.label }}</span>
+        <span class="stat-value">{{ s.value }}</span>
+      </div>
+    </div>
+    <div style="display:flex; gap:1rem; margin-bottom:2rem;">
+      <a routerLink="/admin/products" class="btn btn-primary">Manage Products</a>
+      <a routerLink="/admin/orders" class="btn btn-outline">View Orders</a>
+    </div>
+    <div class="loading-row" *ngIf="!stats"><div class="spinner"></div></div>
+  </div>
+</div>

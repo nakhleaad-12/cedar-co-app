@@ -1,0 +1,141 @@
+<div class="product-detail" *ngIf="product; else loading">
+  <div class="container detail-layout">
+    <!-- Gallery -->
+    <div class="product-gallery">
+      <div class="gallery-main">
+        <img [src]="selectedImage" [alt]="product.name">
+        <span class="badge badge-sale" *ngIf="product.salePrice">Sale</span>
+      </div>
+      <div class="gallery-thumbs" *ngIf="product.images.length > 1">
+        <img *ngFor="let img of product.images"
+             [src]="img" [alt]="product.name"
+             [class.active]="img === selectedImage"
+             (click)="selectedImage = img">
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="product-info">
+      <span class="product-collection">{{ product.collectionName }}</span>
+      <h1 class="product-name">{{ product.name }}</h1>
+      <div class="product-rating" *ngIf="product.reviewCount > 0">
+        <app-star-rating [rating]="product.rating"></app-star-rating>
+        <span>({{ product.reviewCount }} reviews)</span>
+      </div>
+      <div class="product-price">
+        <span class="price-sale" *ngIf="product.salePrice">${{ product.salePrice.toFixed(2) }}</span>
+        <span class="price-orig" [class.struck]="product.salePrice">${{ product.price.toFixed(2) }}</span>
+      </div>
+      <p class="product-desc">{{ product.description }}</p>
+
+      <!-- Size -->
+      <div class="selector" *ngIf="product.sizes?.length">
+        <label>Size</label>
+        <div class="size-options">
+          <button *ngFor="let s of product.sizes" class="size-btn" [class.selected]="selectedSize === s" (click)="selectedSize = s">{{ s }}</button>
+        </div>
+      </div>
+
+      <!-- Color -->
+      <div class="selector" *ngIf="product.colors?.length">
+        <label>Color</label>
+        <div class="color-options">
+          <button *ngFor="let c of product.colors" class="color-btn" [class.selected]="selectedColor === c" (click)="selectedColor = c">{{ c }}</button>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="qty-row">
+        <button (click)="qty = qty > 1 ? qty - 1 : 1" class="qty-btn">−</button>
+        <span>{{ qty }}</span>
+        <button (click)="qty = qty + 1" class="qty-btn">+</button>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-primary add-cart-btn" (click)="addToCart()">
+          {{ addedMsg || 'Add to Cart' }}
+        </button>
+        <button class="wishlist-btn" [class.active]="inWishlist" (click)="toggleWishlist()" title="Toggle Wishlist">
+          <svg viewBox="0 0 24 24" [attr.fill]="inWishlist ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Section -->
+  <div class="container reviews-section">
+    <div class="reviews-header">
+      <h2>Customer Reviews</h2>
+      <div class="rating-summary" *ngIf="product.reviewCount > 0">
+        <app-star-rating [rating]="product.rating"></app-star-rating>
+        <span class="avg-score">{{ product.rating.toFixed(1) }}</span>
+        <span class="count-label">({{ product.reviewCount }} reviews)</span>
+      </div>
+    </div>
+
+    <div class="reviews-layout">
+      <!-- List -->
+      <div class="reviews-list">
+        <div class="empty-reviews" *ngIf="reviews.length === 0">
+          <p>No reviews yet. Be the first to share your thoughts!</p>
+        </div>
+        <div class="review-item" *ngFor="let rev of reviews">
+          <div class="review-meta">
+            <span class="review-user">{{ rev.userName }}</span>
+            <span class="review-date">{{ rev.createdAt | date:'longDate' }}</span>
+          </div>
+          <app-star-rating [rating]="rev.rating"></app-star-rating>
+          <div class="review-actions" *ngIf="auth.currentUser && rev.userId === auth.currentUser.id">
+            <button class="action-link" (click)="startEdit(rev)">Edit</button>
+            <button class="action-link delete" (click)="deleteReview(rev.id)">Delete</button>
+          </div>
+          <h4 class="review-title">{{ rev.title }}</h4>
+          <p class="review-body">{{ rev.body }}</p>
+          <span class="verified-badge" *ngIf="rev.verified">✓ Verified Purchase</span>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="review-form-box">
+        <h3>{{ editingReview ? 'Edit Review' : 'Write a Review' }}</h3>
+        <p class="form-desc">{{ editingReview ? 'Update your feedback for this product.' : 'Share your experience with others.' }}</p>
+        
+        <div class="form-group">
+          <label>Rating</label>
+          <div class="rating-selector">
+            <span *ngFor="let star of [1,2,3,4,5]" 
+                  class="star-btn" 
+                  [class.active]="reviewForm.rating >= star"
+                  (click)="reviewForm.rating = star">★</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" [(ngModel)]="reviewForm.title" placeholder="Review Title" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label>Comment</label>
+          <textarea [(ngModel)]="reviewForm.body" placeholder="What did you think of this product?" rows="4" class="form-input"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary submit-rev-btn" 
+                  (click)="editingReview ? updateReview() : submitReview()" 
+                  [disabled]="submittingReview">
+            {{ submittingReview ? 'Processing...' : (editingReview ? 'Update Review' : 'Post Review') }}
+          </button>
+          <button class="btn btn-outline cancel-btn" *ngIf="editingReview" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="loading-row" style="min-height: 60vh; display:flex; align-items:center; justify-content:center;">
+    <div class="spinner"></div>
+  </div>
+</ng-template>

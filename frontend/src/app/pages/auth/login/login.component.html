@@ -1,0 +1,23 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <h2>Cedar & Co.</h2>
+      <p>Welcome back — sign in to your account</p>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="••••••••">
+      </div>
+      <p class="auth-error" *ngIf="error">{{ error }}</p>
+      <button class="btn btn-primary" type="submit" style="width:100%; justify-content:center;" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+    <p class="auth-switch">Don't have an account? <a routerLink="/auth/register">Register →</a></p>
+  </div>
+</div>

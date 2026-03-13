@@ -1,0 +1,110 @@
+<div class="order-detail-page">
+  <div class="container">
+    <div class="order-header">
+      <div>
+        <span class="section-label">Order History</span>
+        <h1 class="section-title">Order #{{ order?.id }}</h1>
+      </div>
+      <a routerLink="/account" class="btn btn-outline btn-sm">← Back to Orders</a>
+    </div>
+
+    <!-- Loading UI -->
+    <div *ngIf="loading" class="loading-row">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Error UI -->
+    <div *ngIf="error" class="toast error">
+      <p>{{ error }}</p>
+    </div>
+
+    <div class="order-layout" *ngIf="!loading && !error && order">
+      
+      <!-- Left Column: Items List -->
+      <div class="items-card">
+        <h2>Items Purchased</h2>
+        
+        <div *ngFor="let item of order.items" class="item-row">
+          <div class="item-img-placeholder">
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          
+          <div class="item-info">
+            <span class="item-name">{{ item.productName }}</span>
+            <div class="item-variants">
+              <span *ngIf="item.size">Size: {{ item.size }}</span>
+              <span *ngIf="item.color">Color: {{ item.color }}</span>
+            </div>
+          </div>
+          
+          <div class="item-price-qty">
+            <p class="item-total">${{ item.unitPrice | number:'1.2-2' }}</p>
+            <p class="item-qty">Quantity: {{ item.quantity }}</p>
+          </div>
+        </div>
+        <div *ngIf="order.items?.length === 0" class="no-orders">No items found in this order.</div>
+      </div>
+
+      <!-- Right Column: Summary & Info -->
+      <div class="summary-info">
+        
+        <!-- Summary Card -->
+        <div class="summary-card">
+          <h3>Order Summary</h3>
+          
+          <div class="summary-details">
+            <div class="summary-row">
+              <span class="label">Date Placed</span>
+              <span class="value">{{ order.createdAt | date:'mediumDate' }}</span>
+            </div>
+            
+            <div class="summary-row">
+              <span class="label">Status</span>
+              <span class="status-badge" [ngClass]="order.status">
+                {{ order.status }}
+              </span>
+            </div>
+
+            <div class="summary-row">
+              <span class="label">Subtotal</span>
+              <span class="value">${{ order.subtotal | number:'1.2-2' }}</span>
+            </div>
+            
+            <div class="summary-row" *ngIf="order.discount > 0">
+              <span class="label">Discount</span>
+              <span class="value" style="color:var(--lebanese-red);">-${{ order.discount | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="summary-row total-row">
+              <span class="label">Total</span>
+              <span class="value">${{ order.total | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping & Payment Card -->
+        <div class="shipping-card">
+           <h3>Shipping & Payment</h3>
+           
+           <div class="info-block">
+             <label>Delivery Address</label>
+             <p>
+               {{ order.shippingStreet }}<br/>
+               {{ order.shippingCity }}, {{ order.shippingRegion }}<br/>
+               {{ order.shippingCountry }}
+             </p>
+           </div>
+           
+           <div class="info-block payment-info">
+             <label>Payment Details</label>
+             <p>Method: <strong>{{ order.paymentMethod.replace('_', ' ') }}</strong></p>
+             <span class="payment-status" [ngClass]="order.paymentStatus">
+                {{ order.paymentStatus }}
+             </span>
+           </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

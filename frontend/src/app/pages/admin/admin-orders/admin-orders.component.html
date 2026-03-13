@@ -1,0 +1,90 @@
+<div class="admin-page">
+  <div class="container">
+
+    <div class="admin-header">
+      <h1 class="section-title">Orders</h1>
+      <div style="display:flex; gap:0.75rem; align-items:center;">
+        <span style="color:var(--muted); font-size:0.9rem;">{{ totalElements }} total orders</span>
+        <button class="btn btn-outline" (click)="loadOrders()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" *ngIf="loading">Loading orders…</div>
+
+    <!-- Empty -->
+    <div class="empty" *ngIf="!loading && orders.length === 0">
+      <p>No orders yet.</p>
+      <p style="font-size:0.85rem; margin-top:0.5rem;">
+        Customers can place orders after logging in and adding items to their cart.
+      </p>
+    </div>
+
+    <!-- Table -->
+    <div style="overflow-x:auto;" *ngIf="!loading && orders.length > 0">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Items</th>
+            <th>Subtotal</th>
+            <th>Discount</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Shipping</th>
+            <th>Order Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <td><strong>#{{ order.id }}</strong></td>
+            <td>
+              <div>{{ order.userEmail || '—' }}</div>
+            </td>
+            <td>{{ formatDate(order.createdAt) }}</td>
+            <td>
+              <div class="items-tooltip" [title]="itemsSummary(order)">
+                {{ order.items?.length ?? 0 }} item(s)
+              </div>
+            </td>
+            <td>{{ formatCurrency(order.subtotal) }}</td>
+            <td>
+              <span *ngIf="order.discount > 0" style="color:#c0392b;">-{{ formatCurrency(order.discount) }}</span>
+              <span *ngIf="!order.discount || order.discount === 0" class="muted">—</span>
+            </td>
+            <td><strong>{{ formatCurrency(order.total) }}</strong></td>
+            <td>
+              <select class="status-select"
+                      [disabled]="order.updatingStatus"
+                      (change)="updatePayment(order, $any($event.target).value)">
+                <option *ngFor="let p of paymentOptions" [value]="p" [selected]="p === (order.paymentStatus || 'PENDING')">{{ p }}</option>
+              </select>
+              <div style="font-size:0.75rem; color:var(--muted); margin-top:2px;">{{ order.paymentMethod }}</div>
+            </td>
+            <td>
+              <span style="font-size:0.82rem;">{{ order.shippingCity }}, {{ order.shippingCountry }}</span>
+            </td>
+            <td>
+              <select class="status-select"
+                      [disabled]="order.updatingStatus"
+                      (change)="updateStatus(order, $any($event.target).value)">
+                <option *ngFor="let s of statusOptions" [value]="s" [selected]="s === order.status">{{ s }}</option>
+              </select>
+              <span *ngIf="order.updatingStatus" style="font-size:0.75rem; color:var(--muted); display:block; margin-top:2px;">Saving…</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button (click)="prevPage()" [disabled]="page === 0">← Prev</button>
+        <span class="page-info">Page {{ page + 1 }} of {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="page >= totalPages - 1">Next →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
