@@ -1,5 +1,5 @@
 .about-page {
-  padding-top: 100px;
+  padding-top: 130px;
   padding-bottom: 5rem;
   background: var(--midnight);
   min-height: 60vh;
@@ -51,7 +51,7 @@
 // Mobile Responsiveness
 @media(max-width: 768px) {
   .about-page {
-    padding-top: 80px;
+    padding-top: 100px;
     padding-bottom: 3rem;
   }
   .about-header {
