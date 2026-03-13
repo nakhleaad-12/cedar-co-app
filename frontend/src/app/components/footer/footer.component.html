@@ -41,7 +41,7 @@
       <p>Get early access to new arrivals and exclusive deals.</p>
       <form class="newsletter-form" (submit)="subscribe($event)">
         <input type="email" placeholder="your@email.com" [(ngModel)]="email" name="email">
-        <button type="submit" class="btn btn-primary btn-sm">→</button>
+        <button type="submit" class="btn-newsletter">→</button>
       </form>
       <p class="newsletter-success" *ngIf="subscribed">🌿 Thank you for subscribing!</p>
     </div>
