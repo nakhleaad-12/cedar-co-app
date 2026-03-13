@@ -2,12 +2,12 @@
 .detail-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; @media(max-width: 900px) { grid-template-columns: 1fr; gap: 2rem; } }
 .gallery-main { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 3/4; img { width:100%; height:100%; object-fit:cover; } .badge { position:absolute; top:1rem; left:1rem; } }
 .gallery-thumbs { display:flex; gap:0.75rem; margin-top:0.75rem; img { width:80px; height:80px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; transition:border-color 0.2s; &.active { border-color: var(--cedar); } } }
-.product-collection { font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--terracotta); }
-.product-name { font-size: 2rem; margin: 0.5rem 0; }
-.product-rating { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem; font-size:0.85rem; color:var(--muted); }
+.product-collection { font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); }
+.product-name { font-size: 2.25rem; margin: 0.5rem 0; font-weight: 800; }
+.product-rating { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem; font-size:0.9rem; color:var(--muted); }
 .product-price { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
-.price-sale { font-size:1.5rem; font-weight:700; color:var(--terracotta); }
-.price-orig { font-size:1.3rem; font-weight:500; &.struck { text-decoration:line-through; color:var(--muted); font-size:1rem; } }
+.price-sale { font-size:1.75rem; font-weight:800; color:var(--lebanese-red); }
+.price-orig { font-size:1.3rem; font-weight:600; &.struck { text-decoration:line-through; color:var(--muted); font-size:1.1rem; } }
 .product-desc { color:var(--muted); line-height:1.8; margin-bottom:2rem; }
 .selector { margin-bottom:1.5rem; label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.6rem; } }
 .size-options,.color-options { display:flex; flex-wrap:wrap; gap:0.5rem; }

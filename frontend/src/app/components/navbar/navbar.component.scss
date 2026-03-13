@@ -55,9 +55,9 @@
   }
 
   .cart-badge, .wishlist-badge {
-    background: #fff;
-    color: var(--lebanese-red);
-    border-color: var(--lebanese-red);
+    background: var(--lebanese-green);
+    color: #fff;
+    border: none;
   }
 
   .hamburger span { background: #fff; }

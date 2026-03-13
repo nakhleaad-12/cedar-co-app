@@ -3,21 +3,22 @@
 
 // ─── Brand Tokens ─────────────────────────────────────────────
 :root {
-  --lebanese-red:   #EE161F;
-  --lebanese-green: #00A850;
+  --lebanese-red:   #A91D22; // Deep Crimson / Cedar Seed
+  --lebanese-green: #1E4D2B; // Deep Forest / Cedar Needle
+  --gold:           #C5A059; // Premium Accent
   --white:          #FFFFFF;
-  --ivory:          #F9F9F9;
-  --midnight:       #121212;
-  --muted:          #666666;
-  --border:         #EEEEEE;
+  --ivory:          #FBF9F7; // Warm Linen background (Eye comfortable)
+  --midnight:       #1D1B1A; // Softer Charcoal
+  --muted:          #717171; // Refined gray
+  --border:         #EBE8E4; 
   --card-bg:        #FFFFFF;
-  --shadow:         0 4px 20px rgba(0,0,0,0.05);
-  --shadow-lg:      0 10px 40px rgba(0,0,0,0.1);
+  --shadow:         0 4px 20px rgba(29,27,26,0.03);
+  --shadow-lg:      0 10px 40px rgba(29,27,26,0.08);
   --radius:         16px;
   --radius-sm:      10px;
   --font-head:      'Outfit', sans-serif;
   --font-body:      'Outfit', sans-serif;
-  --transition:     all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition:     all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 // ─── Reset ─────────────────────────────────────────────────────
