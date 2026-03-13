@@ -9,11 +9,11 @@
 
     <!-- Desktop Nav -->
     <ul class="navbar-links" [class.open]="menuOpen">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
-      <li><a routerLink="/shop" routerLinkActive="active">Shop</a></li>
-      <li><a routerLink="/collections" routerLinkActive="active">Collections</a></li>
-      <li><a routerLink="/about" routerLinkActive="active">About</a></li>
-      <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="menuOpen = false">Home</a></li>
+      <li><a routerLink="/shop" routerLinkActive="active" (click)="menuOpen = false">Shop</a></li>
+      <li><a routerLink="/collections" routerLinkActive="active" (click)="menuOpen = false">Collections</a></li>
+      <li><a routerLink="/about" routerLinkActive="active" (click)="menuOpen = false">About</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active" (click)="menuOpen = false">Contact</a></li>
     </ul>
 
     <!-- Actions -->
