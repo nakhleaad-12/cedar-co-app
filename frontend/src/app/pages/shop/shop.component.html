@@ -25,9 +25,19 @@
     </div>
     <!-- Pagination -->
     <div class="pagination" *ngIf="totalPages > 1">
-      <button class="btn btn-outline btn-sm" [disabled]="currentPage === 0" (click)="goTo(currentPage - 1)">← Prev</button>
-      <span>{{ currentPage + 1 }} / {{ totalPages }}</span>
-      <button class="btn btn-outline btn-sm" [disabled]="currentPage + 1 >= totalPages" (click)="goTo(currentPage + 1)">Next →</button>
+      <button class="page-nav-btn" [disabled]="currentPage === 0" (click)="goTo(currentPage - 1)">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      
+      <div class="page-numbers">
+        <span class="current-page">{{ currentPage + 1 }}</span>
+        <span class="page-divider">of</span>
+        <span class="total-pages">{{ totalPages }}</span>
+      </div>
+
+      <button class="page-nav-btn" [disabled]="currentPage + 1 >= totalPages" (click)="goTo(currentPage + 1)">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
   </div>
 </div>

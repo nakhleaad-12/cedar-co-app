@@ -36,14 +36,45 @@
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  gap: 2rem; 
-  padding: 4rem 0; 
+  gap: 1.5rem; 
+  padding: 5rem 0;
   
-  span { 
-    font-size: 1rem; 
-    color: var(--midnight); 
-    font-weight: 600;
-  } 
+  .page-nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--midnight);
+    transition: var(--transition);
+
+    &:hover:not(:disabled) {
+      border-color: var(--lebanese-red);
+      color: var(--lebanese-red);
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  .page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    
+    .current-page { color: var(--lebanese-red); font-size: 1.25rem; }
+    .page-divider { color: var(--muted); font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+    .total-pages { color: var(--midnight); font-size: 1.25rem; }
+  }
 }
 
 .loading-row { 

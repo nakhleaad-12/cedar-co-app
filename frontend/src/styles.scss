@@ -270,5 +270,5 @@ img { max-width: 100%; height: auto; display: block; }
   .container { padding: 0 1rem; }
   .section { padding: 40px 0; }
   .btn { padding: 0.8rem 1.75rem; width: 100%; } // Full width buttons on tiny screens
-  .products-grid { grid-template-columns: 1fr; } // Force stack if very narrow
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; } 
 }
