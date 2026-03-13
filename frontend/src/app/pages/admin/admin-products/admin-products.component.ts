@@ -31,27 +31,29 @@ interface Product {
   styles: [`
     .admin-page { padding-top: 100px; padding-bottom: 5rem; min-height: 80vh; }
     .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-    .products-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .table-wrapper { overflow-x: auto; background: #fff; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.08); -webkit-overflow-scrolling: touch; }
+    .products-table { width: 100%; border-collapse: collapse; min-width: 900px; }
     .products-table th, .products-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
     .products-table th { background: var(--midnight); color: #fff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .6px; }
     .products-table tr:last-child td { border-bottom: none; }
-    .products-table tr:hover td { background: #fafaf8; }
     .thumb { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
     .badge-active { background: #d4edda; color: #155724; }
     .badge-inactive { background: #f8d7da; color: #721c24; }
-    .btn-danger { background: #c0392b; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: var(--radius); cursor: pointer; font-size: 0.82rem; }
-    .btn-danger:hover { background: #a93226; }
     .create-panel { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; }
     .create-panel h2 { margin-bottom: 1.2rem; font-size: 1.1rem; font-family: var(--font-head); }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
     .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
     .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-    .form-group input, .form-group select, .form-group textarea { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.9rem; }
-    .form-group textarea { resize: vertical; min-height: 70px; }
-    .form-actions { display: flex; gap: 1rem; margin-top: 1.2rem; }
-    .loading { text-align: center; padding: 3rem; color: var(--muted); }
-    .empty { text-align: center; padding: 3rem; color: var(--muted); }
+    .form-group input, .form-group select, .form-group textarea { padding: 0.65rem 0.85rem; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.9rem; transition: var(--transition); }
+    .form-group input:focus { border-color: var(--lebanese-red); outline: none; }
+    .form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group { grid-column: span 1 !important; }
+      .form-actions { flex-direction: column; button { width: 100%; } }
+      .create-panel { padding: 1rem; }
+    }
   `]
 })
 export class AdminProductsComponent implements OnInit {

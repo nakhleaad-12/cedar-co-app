@@ -36,26 +36,22 @@ const PAYMENT_OPTIONS = ['PENDING', 'PAID', 'FAILED', 'REFUNDED'];
   styles: [`
     .admin-page { padding-top: 100px; padding-bottom: 5rem; min-height: 80vh; }
     .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-    .orders-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .table-wrapper { overflow-x: auto; background: #fff; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.08); -webkit-overflow-scrolling: touch; }
+    .orders-table { width: 100%; border-collapse: collapse; min-width: 1000px; }
     .orders-table th, .orders-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
     .orders-table th { background: var(--midnight); color: #fff; font-size: 0.76rem; text-transform: uppercase; letter-spacing: .6px; }
     .orders-table tr:last-child td { border-bottom: none; }
-    .orders-table tr:hover td { background: #fafaf8; }
     .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
     .status-PENDING { background: #fff3cd; color: #856404; }
     .status-PROCESSING { background: #cce5ff; color: #004085; }
     .status-SHIPPED { background: #d4edda; color: #155724; }
     .status-DELIVERED { background: #c3e6cb; color: #0f5132; }
     .status-CANCELLED { background: #f8d7da; color: #721c24; }
-    .status-select { padding: 0.3rem 0.6rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.82rem; cursor: pointer; }
+    .status-select { padding: 0.45rem 0.6rem; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.82rem; cursor: pointer; }
     .pagination { display: flex; align-items: center; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
-    .pagination button { padding: 0.4rem 1rem; border: 1px solid var(--border); background: #fff; border-radius: var(--radius); cursor: pointer; }
-    .pagination button:disabled { opacity: 0.4; cursor: default; }
+    .pagination button { padding: 0.5rem 1.25rem; border: 1px solid var(--border); background: #fff; border-radius: 50px; cursor: pointer; transition: var(--transition); &:hover { border-color: var(--lebanese-red); } }
+    .pagination button:disabled { opacity: 0.4; cursor: default; &:hover { border-color: var(--border); } }
     .page-info { font-size: 0.88rem; color: var(--muted); }
-    .loading { text-align: center; padding: 3rem; color: var(--muted); }
-    .empty { text-align: center; padding: 3rem; color: var(--muted); font-size: 1rem; }
-    .items-tooltip { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
-    .muted { color: var(--muted); }
   `]
 })
 export class AdminOrdersComponent implements OnInit {

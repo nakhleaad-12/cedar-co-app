@@ -83,7 +83,7 @@
     <div class="loading" *ngIf="loading">Loading products…</div>
 
     <!-- Table -->
-    <div style="overflow-x:auto;" *ngIf="!loading">
+    <div class="table-wrapper" *ngIf="!loading">
       <table class="products-table" *ngIf="products.length > 0; else emptyBlock">
         <thead>
           <tr>
