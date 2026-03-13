@@ -208,15 +208,26 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: var(--ivory);
+    background: #fff; // Force solid white for readability in drawer
     flex-direction: column;
     justify-content: center;
-    gap: 3rem;
-    font-size: 1.5rem;
-    z-index: -1;
+    align-items: center;
+    gap: 2.5rem;
+    z-index: 1001;
+    padding: 2rem;
 
-    &.open { display: flex; }
-    a { font-size: 1.4rem; }
+    &.open { display: flex; animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    
+    a { 
+      font-size: 1.5rem; 
+      color: var(--midnight) !important; // Ensure high contrast
+      &::after { display: none; } // Remove underline for cleaner mobile look
+    }
   }
-  .hamburger { display: flex; }
+  .hamburger { display: flex; z-index: 1002; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
 }

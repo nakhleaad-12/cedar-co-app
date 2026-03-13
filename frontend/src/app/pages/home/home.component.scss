@@ -56,7 +56,19 @@ h1 {
   opacity: 0.9;
 }
 
-.hero-cta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.hero-cta { 
+  display: flex; 
+  gap: 1rem; 
+  flex-wrap: wrap; 
+  @media(max-width: 480px) { flex-direction: column; }
+}
+
+@media(max-width: 768px) {
+  .hero { min-height: 80vh; padding: 40px 0; }
+  .hero-content { padding-top: 80px; padding-bottom: 40px; text-align: center; margin: 0 auto; }
+  .hero-subtitle { margin: 0 auto 2.5rem; }
+  .hero-cta { justify-content: center; }
+}
 
 .hero-scroll {
   position: absolute;
