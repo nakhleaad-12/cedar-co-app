@@ -164,37 +164,16 @@
   }
 }
 
-.add-cart-btn { 
-  flex: 1; 
-  justify-content: center; 
-  padding: 1rem 2rem; 
-  font-size: 1rem; 
+@media(max-width: 768px) {
+  .product-detail { padding-top: 80px; }
+  .detail-layout { gap: 1.5rem; }
+  .product-name { font-size: 1.6rem; }
+  .price-sale { font-size: 1.25rem; }
+  .actions-row { flex-direction: column; gap: 0.75rem; .add-cart-btn { width: 100%; border-radius: 50px; } .wishlist-btn { width: 100%; border-radius: 50px; height: 50px; } }
+  .qty-row { justify-content: center; }
 }
-.wishlist-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: var(--midnight);
 
-  svg { width: 24px; height: 24px; transition: transform 0.3s ease; }
-  &:hover {
-    border-color: var(--lebanese-red);
-    color: var(--lebanese-red);
-    background: rgba(238,22,31,0.05);
-    transform: translateY(-2px);
-    svg { transform: scale(1.1); }
-  }
-  &.active {
-    background: var(--lebanese-red);
-    border-color: var(--lebanese-red);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(238,22,31,0.3);
-  }
+@media(max-width: 480px) {
+  .reviews-header h2 { font-size: 1.4rem; }
+  .review-form-box { padding: 1.5rem; }
 }
