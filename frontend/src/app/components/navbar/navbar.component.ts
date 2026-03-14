@@ -62,4 +62,9 @@ export class NavbarComponent implements OnInit {
     this.userMenuOpen = false;
     this.menuOpen = false;
   }
+
+  toggleNotifications(): void {
+    // We call requestPermission which handles the prompt if needed
+    this.push.requestPermission();
+  }
 }
