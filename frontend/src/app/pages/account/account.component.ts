@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService, AuthUser } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
-import { PushNotificationService } from '../../services/push-notification.service';
 @Component({ 
   selector: 'app-account', 
   templateUrl: './account.component.html',
@@ -11,9 +10,7 @@ import { PushNotificationService } from '../../services/push-notification.servic
 export class AccountComponent implements OnInit {
   user: AuthUser | null = null;
   orders: any[] = [];
-  fcmToken$: any;
-  constructor(private auth: AuthService, private http: HttpClient, private push: PushNotificationService) {
-    this.fcmToken$ = this.push.token$;
+  constructor(private auth: AuthService, private http: HttpClient) {
   }
   ngOnInit(): void {
     this.auth.currentUser$.subscribe(u => {
@@ -34,8 +31,5 @@ export class AccountComponent implements OnInit {
         this.orders = [];
       }
     });
-  }
-  enableNotifications() {
-    this.push.requestPermission();
   }
 }

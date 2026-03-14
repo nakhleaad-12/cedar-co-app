@@ -14,6 +14,7 @@
       <li><a routerLink="/collections" routerLinkActive="active" (click)="menuOpen = false">Collections</a></li>
       <li><a routerLink="/about" routerLinkActive="active" (click)="menuOpen = false">About</a></li>
       <li><a routerLink="/contact" routerLinkActive="active" (click)="menuOpen = false">Contact</a></li>
+      <li *ngIf="isLoggedIn && !(push.token$ | async)"><a (click)="enableNotifications()" class="mobile-notification-trigger">Enable Notifications</a></li>
     </ul>
 
     <!-- Actions -->
@@ -38,6 +39,7 @@
             <a routerLink="/account" (click)="userMenuOpen=false">My Account</a>
             <a routerLink="/account" (click)="userMenuOpen=false">Orders</a>
             <a routerLink="/admin" *ngIf="isAdmin" (click)="userMenuOpen=false">Admin</a>
+            <a (click)="enableNotifications()" *ngIf="!(push.token$ | async)" class="notification-trigger">Enable Notifications</a>
             <a (click)="logout()" class="logout-link">Sign Out</a>
           </div>
         </div>

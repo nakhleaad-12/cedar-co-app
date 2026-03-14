@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
 import { WishlistService } from '../../services/wishlist.service';
+import { PushNotificationService } from '../../services/push-notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,6 +22,7 @@ export class NavbarComponent implements OnInit {
     public auth: AuthService,
     private cartService: CartService,
     private wishlistService: WishlistService,
+    public push: PushNotificationService,
     private router: Router
   ) {
     this.router.events.subscribe(() => {
@@ -53,5 +55,11 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();
     this.userMenuOpen = false;
     this.router.navigate(['/']);
+  }
+
+  enableNotifications(): void {
+    this.push.requestPermission();
+    this.userMenuOpen = false;
+    this.menuOpen = false;
   }
 }
