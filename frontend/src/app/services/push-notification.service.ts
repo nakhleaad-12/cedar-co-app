@@ -16,13 +16,13 @@ export class PushNotificationService {
 
   // User will need to replace these
   private firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    vapidKey: "YOUR_VAPID_KEY"
+    apiKey: "AIzaSyBdJljrCEM1nnkMVVJh_DMB4JhnUxEcrCY",
+    authDomain: "cedarco-app.firebaseapp.com",
+    projectId: "cedarco-app",
+    storageBucket: "cedarco-app.firebasestorage.app",
+    messagingSenderId: "37913232976",
+    appId: "1:37913232976:web:9bea0a940c857df4bc3355",
+    vapidKey: "BLfT7vGK6qsXeyl1vyYYL9jW_N4MG1n2lJe1jTEZ0zUZCbooP9oRrjxYINtbsyx8UJWfwT24HLm8nxA-zt-zyh4"
   };
 
   constructor(private http: HttpClient, private auth: AuthService) {

@@ -3,12 +3,12 @@ importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compa
 
 // These will be configurable by the user later
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBdJljrCEM1nnkMVVJh_DMB4JhnUxEcrCY",
+  authDomain: "cedarco-app.firebaseapp.com",
+  projectId: "cedarco-app",
+  storageBucket: "cedarco-app.firebasestorage.app",
+  messagingSenderId: "37913232976",
+  appId: "1:37913232976:web:9bea0a940c857df4bc3355"
 };
 
 firebase.initializeApp(firebaseConfig);
