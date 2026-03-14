@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppNotificationService, AppNotification } from '../../services/app-notification.service';
 import { Observable } from 'rxjs';
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
   templateUrl: './notification-tray.component.html',
   styleUrls: ['./notification-tray.component.scss']
 })
-export class NotificationTrayComponent {
+export class NotificationTrayComponent implements OnChanges {
   @Input() isOpen = false;
   @Output() close = new EventEmitter<void>();
 
@@ -18,6 +18,12 @@ export class NotificationTrayComponent {
 
   constructor(private service: AppNotificationService) {
     this.notifications$ = this.service.notifications$;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isOpen']?.currentValue === true) {
+      this.service.refresh();
+    }
   }
 
   markAsRead(id: number) {

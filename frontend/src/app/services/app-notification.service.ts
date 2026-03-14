@@ -44,9 +44,10 @@ export class AppNotificationService {
   }
 
   fetchNotifications(page: number = 0, size: number = 10): Observable<AppNotification[]> {
-    return this.http.get<AppNotification[]>(`${environment.apiUrl}/notifications`, {
+    return this.http.get<any>(`${environment.apiUrl}/notifications`, {
       params: { page: page.toString(), size: size.toString() }
     }).pipe(
+      map(resp => Array.isArray(resp) ? resp : (resp.content || [])),
       tap(notifs => this.notificationsSubject.next(notifs))
     );
   }
