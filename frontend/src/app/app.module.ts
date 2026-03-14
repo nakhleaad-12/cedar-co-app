@@ -29,7 +29,6 @@ import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
-import { AccountComponent } from './pages/account/account.component';
 import { OrderDetailComponent } from './pages/account/order-detail/order-detail.component';
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 import { AdminProductsComponent } from './pages/admin/admin-products/admin-products.component';
@@ -56,7 +55,6 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     ContactComponent,
     LoginComponent,
     RegisterComponent,
-    AccountComponent,
     OrderDetailComponent,
     AdminDashboardComponent,
     AdminProductsComponent,
