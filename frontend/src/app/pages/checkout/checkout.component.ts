@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({ selector: 'app-checkout', templateUrl: './checkout.component.html' })
@@ -13,6 +14,7 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private auth: AuthService,
+    private cartService: CartService,
     private router: Router,
     private toast: ToastService
   ) {}
@@ -31,7 +33,14 @@ export class CheckoutComponent implements OnInit {
       shippingRegion: this.region, shippingCountry: this.country,
       paymentMethod: this.paymentMethod, couponCode: this.coupon || null
     }).subscribe({
-      next: () => { this.success = true; this.toast.show('Order placed successfully!', 'success'); },
+      next: () => { 
+        this.success = true; 
+        this.toast.show('Order placed successfully!', 'success');
+        this.cartService.loadCart().subscribe();
+        setTimeout(() => {
+          this.router.navigate(['/account']);
+        }, 2000);
+      },
       error: () => this.toast.show('Failed to place order. Please try again.', 'error')
     });
   }
