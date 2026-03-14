@@ -5,6 +5,7 @@ import com.cedarco.repository.UserRepository;
 import com.cedarco.service.FcmService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationController {
 
     private final FcmService fcmService;
@@ -20,10 +22,18 @@ public class NotificationController {
 
     @PostMapping("/tokens")
     public ResponseEntity<?> saveToken(@AuthenticationPrincipal UserDetails userDetails, @RequestBody TokenRequest request) {
-        User user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        fcmService.saveToken(user, request.getToken());
-        return ResponseEntity.ok().build();
+        if (userDetails == null) {
+            return ResponseEntity.status(401).body("User not authenticated");
+        }
+        try {
+            User user = userRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("User not found: " + userDetails.getUsername()));
+            fcmService.saveToken(user, request.getToken());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error saving FCM token: ", e);
+            return ResponseEntity.status(500).body("Error saving token: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/tokens/{token}")

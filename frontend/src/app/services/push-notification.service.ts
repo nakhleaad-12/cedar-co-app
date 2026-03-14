@@ -31,27 +31,46 @@ export class PushNotificationService {
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
         console.log('Notification permission granted.');
-        this.getAndSaveToken();
+        this.registerAndGetToken();
       } else {
         console.warn('Unable to get permission to notify.');
       }
     });
   }
 
-  private getAndSaveToken() {
-    getToken(this.messaging, { vapidKey: this.firebaseConfig.vapidKey })
-      .then((currentToken) => {
-        if (currentToken) {
-          console.log('FCM Token:', currentToken);
-          this.tokenSubject.next(currentToken);
-          this.syncTokenWithBackend(currentToken);
-        } else {
-          console.log('No registration token available. Request permission to generate one.');
-        }
-      })
-      .catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
+  private async registerAndGetToken() {
+    try {
+      // Explicitly register service worker and wait for it to be active
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      
+      // Wait for service worker to be active
+      if (!registration.active) {
+        await new Promise<void>((resolve) => {
+          registration.addEventListener('activate', () => resolve(), { once: true });
+          // If already redundant or failed, we might wait forever, so let's check state
+          if (registration.installing || registration.waiting) {
+            // waiting...
+          } else {
+            resolve();
+          }
+        });
+      }
+
+      const currentToken = await getToken(this.messaging, {
+        vapidKey: this.firebaseConfig.vapidKey,
+        serviceWorkerRegistration: registration
       });
+
+      if (currentToken) {
+        console.log('FCM Token:', currentToken);
+        this.tokenSubject.next(currentToken);
+        this.syncTokenWithBackend(currentToken);
+      } else {
+        console.log('No registration token available. Request permission to generate one.');
+      }
+    } catch (err) {
+      console.log('An error occurred while retrieving token. ', err);
+    }
   }
 
   private syncTokenWithBackend(token: string) {
