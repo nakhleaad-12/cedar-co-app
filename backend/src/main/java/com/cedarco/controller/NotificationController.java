@@ -36,7 +36,7 @@ public class NotificationController {
         }
     }
 
-    @PostMapping("/test-push")
+    @GetMapping("/test-push")
     public ResponseEntity<?> testPush(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
         

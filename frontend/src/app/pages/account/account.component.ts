@@ -30,5 +30,10 @@ export class AccountComponent implements OnInit {
         this.orders = [];
       }
     });
+  sendTestPush(): void {
+    this.http.get(`${environment.apiUrl}/notifications/test-push`, { responseType: 'text' }).subscribe({
+      next: (res) => alert('Test Push Triggered! Check your device. If nothing appears, check browser notification permission.'),
+      error: (err) => console.error('Test push failed:', err)
+    });
   }
 }
