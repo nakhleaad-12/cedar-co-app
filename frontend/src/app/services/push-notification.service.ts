@@ -88,7 +88,12 @@ export class PushNotificationService {
     if (!this.messaging) return;
     onMessage(this.messaging, (payload) => {
       console.log('Message received. ', payload);
-      // You can trigger a toast or update local state here
+      if (payload.notification) {
+        new Notification(payload.notification.title || 'New Notification', {
+          body: payload.notification.body,
+          icon: '/assets/icons/icon-72x72.png'
+        });
+      }
     });
   }
 }
