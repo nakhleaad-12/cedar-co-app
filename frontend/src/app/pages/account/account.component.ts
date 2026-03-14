@@ -12,8 +12,10 @@ export class AccountComponent implements OnInit {
   user: AuthUser | null = null;
   orders: any[] = [];
   fcmToken$: any;
+  debugStatus$: any;
   constructor(private auth: AuthService, private http: HttpClient, private push: PushNotificationService) {
     this.fcmToken$ = this.push.token$;
+    this.debugStatus$ = this.push.debugStatus$;
   }
   ngOnInit(): void {
     this.auth.currentUser$.subscribe(u => {

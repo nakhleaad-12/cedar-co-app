@@ -29,7 +29,10 @@
           <div class="debug-info" style="margin-top: 1rem; font-size: 0.7rem; color: #666; word-break: break-all;">
             <strong>Notification Status:</strong> 
             <span *ngIf="fcmToken$ | async as token">Connected ✅</span>
-            <span *ngIf="!(fcmToken$ | async)">Not Connected ❌ (Try clicking "Send Test Notification" again or check Settings)</span>
+            <span *ngIf="!(fcmToken$ | async)">Not Connected ❌</span>
+            <div style="margin-top: 0.5rem; border-top: 1px solid #eee; padding-top: 0.5rem;">
+              <strong>Step:</strong> {{ debugStatus$ | async }}
+            </div>
           </div>
         </div>
       </div>

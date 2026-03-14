@@ -12,7 +12,9 @@ import { BehaviorSubject } from 'rxjs';
 export class PushNotificationService {
   private messaging: any;
   private tokenSubject = new BehaviorSubject<string | null>(null);
+  private debugStatusSubject = new BehaviorSubject<string>('Initializing...');
   token$ = this.tokenSubject.asObservable();
+  debugStatus$ = this.debugStatusSubject.asObservable();
 
   private firebaseConfig = environment.firebase;
 
@@ -26,53 +28,60 @@ export class PushNotificationService {
   }
 
   async requestPermission() {
-    if (!this.messaging) return;
+    if (!this.messaging) {
+      this.debugStatusSubject.next('Error: Firebase Messaging not initialized');
+      return;
+    }
 
+    this.debugStatusSubject.next('Requesting permission...');
     try {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        await this.registerAndGetToken();
-      } else {
-        console.warn('Notification permission denied:', permission);
+      if (!('Notification' in window)) {
+        this.debugStatusSubject.next('Error: Browser does not support Notifications');
+        return;
       }
-    } catch (error) {
-      console.error('Error requesting notification permission:', error);
+      const permission = await Notification.requestPermission();
+      this.debugStatusSubject.next(`Permission: ${permission}`);
+      if (permission === 'granted') {
+        await this.registerAndGetToken();
+      }
+    } catch (error: any) {
+      this.debugStatusSubject.next(`Error: ${error.message || error}`);
     }
   }
 
   private async registerAndGetToken() {
     try {
-      // Explicitly register service worker and wait for it to be active
+      this.debugStatusSubject.next('Registering Service Worker...');
       const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
       
-      // Wait for service worker to be active
+      this.debugStatusSubject.next('Waiting for SW activation...');
       if (!registration.active) {
-        await new Promise<void>((resolve) => {
-          registration.addEventListener('activate', () => resolve(), { once: true });
-          // If already redundant or failed, we might wait forever, so let's check state
-          if (registration.installing || registration.waiting) {
-            // waiting...
-          } else {
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('SW activation timeout')), 10000);
+          registration.addEventListener('activate', () => {
+            clearTimeout(timeout);
             resolve();
-          }
+          }, { once: true });
+          if (!registration.installing && !registration.waiting) resolve();
         });
       }
 
+      this.debugStatusSubject.next('Getting Firebase Token...');
       const currentToken = await getToken(this.messaging, {
         vapidKey: this.firebaseConfig.vapidKey,
         serviceWorkerRegistration: registration
       });
 
       if (currentToken) {
-        console.log('FCM Token:', currentToken);
+        this.debugStatusSubject.next('Connected ✅');
         this.tokenSubject.next(currentToken);
         this.syncTokenWithBackend(currentToken);
       } else {
-        console.log('No registration token available. Request permission to generate one.');
+        this.debugStatusSubject.next('Error: No token received');
       }
-    } catch (err) {
-      console.log('An error occurred while retrieving token. ', err);
+    } catch (err: any) {
+      this.debugStatusSubject.next(`Error: ${err.message || err}`);
+      console.error('FCM Token error:', err);
     }
   }
 
