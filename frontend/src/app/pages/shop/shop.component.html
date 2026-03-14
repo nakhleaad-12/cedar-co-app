@@ -17,11 +17,8 @@
       </select>
     </div>
     <!-- Products -->
-    <div class="products-grid" *ngIf="products.length > 0">
+    <div class="products-grid" *ngIf="!loading; else productsSkeleton">
       <app-product-card *ngFor="let p of products" [product]="p"></app-product-card>
-    </div>
-    <div class="loading-row" *ngIf="loading">
-      <div class="spinner"></div>
     </div>
     <!-- Pagination -->
     <div class="pagination" *ngIf="totalPages > 1">
@@ -41,3 +38,23 @@
     </div>
   </div>
 </div>
+
+<ng-template #productsSkeleton>
+  <div class="products-grid" aria-hidden="true">
+    <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6,7,8]">
+      <div class="skeleton-card-image skeleton"></div>
+      <div class="skeleton-card-body">
+        <div class="skeleton-card-meta">
+          <div class="skeleton skeleton-line sm"></div>
+          <div class="skeleton skeleton-line sm"></div>
+        </div>
+        <div class="skeleton skeleton-line xl"></div>
+        <div class="skeleton skeleton-line md"></div>
+        <div class="skeleton-card-price">
+          <div class="skeleton skeleton-line sm" style="width: 70px; margin-bottom: 0;"></div>
+          <div class="skeleton skeleton-line sm" style="width: 90px; margin-bottom: 0;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
