@@ -41,7 +41,6 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     FooterComponent,
     ToastContainerComponent,
     ProductCardComponent,
@@ -73,6 +72,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
+    NavbarComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

@@ -1,12 +1,17 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
-import { Router } from '@angular/router';
 import { WishlistService } from '../../services/wishlist.service';
 import { PushNotificationService } from '../../services/push-notification.service';
+import { AppNotificationService } from '../../services/app-notification.service';
+import { NotificationTrayComponent } from '../notification-tray/notification-tray.component';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
+  imports: [CommonModule, RouterModule, NotificationTrayComponent],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
@@ -17,12 +22,15 @@ export class NavbarComponent implements OnInit {
   cartCount = 0;
   wishlistCount = 0;
   isHome = false;
+  unreadNotificationsCount = 0;
+  notificationTrayOpen = false;
 
   constructor(
     public auth: AuthService,
     private cartService: CartService,
     private wishlistService: WishlistService,
     public push: PushNotificationService,
+    public notificationService: AppNotificationService,
     private router: Router
   ) {
     this.router.events.subscribe(() => {
@@ -44,6 +52,9 @@ export class NavbarComponent implements OnInit {
       this.cartService.loadCart().subscribe();
       this.wishlistService.load().subscribe();
     }
+    this.notificationService.unreadCount$.subscribe(count => {
+      this.unreadNotificationsCount = count;
+    });
   }
 
   @HostListener('window:scroll')

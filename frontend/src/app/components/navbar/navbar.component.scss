@@ -131,7 +131,7 @@
   }
 }
 
-.cart-badge, .wishlist-badge {
+.cart-badge, .wishlist-badge, .notification-badge {
   position: absolute;
   top: 0; right: 0;
   background: var(--lebanese-red);
@@ -143,6 +143,19 @@
   display: flex; align-items: center; justify-content: center;
   border: 2px solid #fff;
   transition: all 0.3s ease;
+}
+
+.notification-bell {
+  &:hover svg {
+    animation: bellShake 0.5s ease;
+  }
+}
+
+@keyframes bellShake {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+  75% { transform: rotate(10deg); }
 }
 
 .user-menu { position: relative; }

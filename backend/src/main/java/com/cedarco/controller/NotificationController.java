@@ -1,6 +1,8 @@
 package com.cedarco.controller;
 
+import com.cedarco.entity.AppNotification;
 import com.cedarco.entity.User;
+import com.cedarco.repository.AppNotificationRepository;
 import com.cedarco.repository.UserRepository;
 import com.cedarco.service.FcmService;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class NotificationController {
 
     private final FcmService fcmService;
     private final UserRepository userRepository;
+    private final AppNotificationRepository appNotificationRepository;
 
     @PostMapping("/tokens")
     public ResponseEntity<?> saveToken(@AuthenticationPrincipal UserDetails userDetails, @RequestBody TokenRequest request) {
@@ -52,6 +55,53 @@ public class NotificationController {
     @DeleteMapping("/tokens/{token}")
     public ResponseEntity<?> deleteToken(@PathVariable String token) {
         fcmService.deleteToken(token);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getMyNotifications(@AuthenticationPrincipal UserDetails userDetails,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        return ResponseEntity.ok(appNotificationRepository.findByUserOrderByCreatedAtDesc(user, org.springframework.data.domain.PageRequest.of(page, size)));
+    }
+
+    @GetMapping("/unread-count")
+    public ResponseEntity<?> getUnreadCount(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        return ResponseEntity.ok(appNotificationRepository.countByUserAndIsReadFalse(user));
+    }
+
+    @PostMapping("/mark-all-read")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<?> markAllRead(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        appNotificationRepository.markAllAsReadForUser(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/read")
+    public ResponseEntity<?> markAsRead(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
+        AppNotification notif = appNotificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
+        
+        // Security check
+        if (!notif.getUser().getEmail().equals(userDetails.getUsername())) {
+            return ResponseEntity.status(403).build();
+        }
+        
+        notif.setRead(true);
+        appNotificationRepository.save(notif);
         return ResponseEntity.ok().build();
     }
 

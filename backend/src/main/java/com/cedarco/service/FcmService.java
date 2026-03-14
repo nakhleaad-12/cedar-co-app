@@ -1,7 +1,9 @@
 package com.cedarco.service;
 
+import com.cedarco.entity.AppNotification;
 import com.cedarco.entity.FcmToken;
 import com.cedarco.entity.User;
+import com.cedarco.repository.AppNotificationRepository;
 import com.cedarco.repository.FcmTokenRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -26,6 +28,7 @@ import java.util.Optional;
 public class FcmService {
 
     private final FcmTokenRepository fcmTokenRepository;
+    private final AppNotificationRepository appNotificationRepository;
 
     @Value("${app.firebase-config-path:firebase-service-account.json}")
     private String firebaseConfigPath;
@@ -114,6 +117,14 @@ public class FcmService {
         List<FcmToken> tokens = fcmTokenRepository.findByUser(user);
         log.info("Found {} tokens for user {}", tokens.size(), user.getEmail());
         
+        // Persist for In-App viewer
+        appNotificationRepository.save(AppNotification.builder()
+                .user(user)
+                .title(title)
+                .body(body)
+                .isRead(false)
+                .build());
+
         for (FcmToken fcmToken : tokens) {
             try {
                 log.info("Attempting to send FCM message to token: {}...", fcmToken.getToken().substring(0, Math.min(10, fcmToken.getToken().length())));
@@ -149,6 +160,20 @@ public class FcmService {
 
         List<FcmToken> allTokens = fcmTokenRepository.findAll();
         log.info("Broadcasting message to {} device(s)", allTokens.size());
+
+        // We persist historical notifications for all users
+        // Note: For very large user bases, this should be an async/batch process
+        // For current scale, we can fetch all Active users and save for them.
+        // Simplified: Create for all users with tokens
+        fcmTokenRepository.findAll().stream()
+                .map(FcmToken::getUser)
+                .distinct()
+                .forEach(u -> appNotificationRepository.save(AppNotification.builder()
+                        .user(u)
+                        .title(title)
+                        .body(body)
+                        .isRead(false)
+                        .build()));
 
         for (FcmToken fcmToken : allTokens) {
             try {
