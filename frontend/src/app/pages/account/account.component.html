@@ -31,14 +31,6 @@
             <button class="btn btn-outline btn-sm w-full">Change Password</button>
             <button class="btn btn-outline btn-sm w-full">Edit Profile</button>
             
-            <div class="push-status" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 0.8rem; color: #666;">Push Notifications</span>
-              <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <span *ngIf="fcmToken$ | async" style="width: 8px; height: 8px; border-radius: 50%; background: #4caf50;" title="Connected"></span>
-                <span *ngIf="!(fcmToken$ | async)" style="width: 8px; height: 8px; border-radius: 50%; background: #f44336;" title="Disconnected"></span>
-                <button *ngIf="!(fcmToken$ | async)" (click)="enableNotifications()" class="btn btn-sm" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; background: #12372a; color: white;">Enable</button>
-              </div>
-            </div>
           </div>
         </div>
 
