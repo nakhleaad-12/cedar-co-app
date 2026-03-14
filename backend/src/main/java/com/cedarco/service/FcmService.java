@@ -90,12 +90,26 @@ public class FcmService {
         for (FcmToken fcmToken : tokens) {
             try {
                 log.info("Attempting to send FCM message to token: {}...", fcmToken.getToken().substring(0, Math.min(10, fcmToken.getToken().length())));
+                
+                com.google.firebase.messaging.WebpushConfig webpushConfig = com.google.firebase.messaging.WebpushConfig.builder()
+                        .setNotification(com.google.firebase.messaging.WebpushNotification.builder()
+                                .setTitle(title)
+                                .setBody(body)
+                                .setIcon("/assets/icons/icon-72x72.png")
+                                .setVibrate(new int[]{200, 100, 200})
+                                .build())
+                        .setFcmOptions(com.google.firebase.messaging.WebpushFcmOptions.builder()
+                                .setLink("https://cedar-co-app.vercel.app/account")
+                                .build())
+                        .build();
+
                 Message message = Message.builder()
                         .setToken(fcmToken.getToken())
                         .setNotification(Notification.builder()
                                 .setTitle(title)
                                 .setBody(body)
                                 .build())
+                        .setWebpushConfig(webpushConfig)
                         .putData("orderId", String.valueOf(orderId))
                         .build();
 

@@ -89,9 +89,16 @@ export class PushNotificationService {
     onMessage(this.messaging, (payload) => {
       console.log('Message received. ', payload);
       if (payload.notification) {
-        new Notification(payload.notification.title || 'New Notification', {
-          body: payload.notification.body,
-          icon: '/assets/icons/icon-72x72.png'
+        // Use service worker to show notification for better mobile support
+        navigator.serviceWorker.ready.then(registration => {
+          registration.showNotification(payload.notification.title || 'New Notification', {
+            body: payload.notification.body,
+            icon: '/assets/icons/icon-72x72.png',
+            badge: '/assets/icons/icon-72x72.png', // Small icon for notification bar
+            vibrate: [100, 50, 100],
+            data: payload.data,
+            tag: 'order-notification' // Prevents duplicate notifications
+          });
         });
       }
     });
