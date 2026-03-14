@@ -130,12 +130,15 @@ public class OrderService {
         r.setTotal(o.getTotal());
         r.setCouponCode(o.getCouponCode());
         r.setPaymentMethod(o.getPaymentMethod());
+        r.setShippingStreet(o.getShippingStreet());
         r.setShippingCity(o.getShippingCity());
+        r.setShippingRegion(o.getShippingRegion());
         r.setShippingCountry(o.getShippingCountry());
         if (o.getUser() != null) {
             r.setUserEmail(o.getUser().getEmail());
             r.setUserFirstName(o.getUser().getFirstName());
             r.setUserLastName(o.getUser().getLastName());
+            r.setUserPhone(o.getUser().getPhone());
         }
         r.setCreatedAt(o.getCreatedAt());
         r.setItems(o.getItems().stream().map(i -> {

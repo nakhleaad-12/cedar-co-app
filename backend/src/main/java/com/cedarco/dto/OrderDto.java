@@ -30,12 +30,15 @@ public class OrderDto {
         private BigDecimal total;
         private String couponCode;
         private String paymentMethod;
+        private String shippingStreet;
         private String shippingCity;
+        private String shippingRegion;
         private String shippingCountry;
         private List<ItemResponse> items;
         private String userEmail;
         private String userFirstName;
         private String userLastName;
+        private String userPhone;
         private LocalDateTime createdAt;
     }
 

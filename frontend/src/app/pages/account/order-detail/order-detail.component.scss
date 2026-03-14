@@ -9,168 +9,230 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
   
   h1 { font-weight: 900; margin-bottom: 0; }
+  .header-actions { display: flex; gap: 0.75rem; }
 }
 
-.order-layout {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 2.5rem;
-  
-  @media(max-width: 1000px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.items-card, .summary-card, .shipping-card {
-  background: var(--white);
-  padding: 2.5rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  
-  h2, h3 {
-    font-size: 1.4rem;
-    font-weight: 800;
-    margin-bottom: 2rem;
-    color: var(--midnight);
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -0.5rem; left: 0;
-      width: 2rem; height: 4px;
-      background: var(--lebanese-red);
-      border-radius: 50px;
-    }
-  }
-}
-
-.item-row {
-  display: grid;
-  grid-template-columns: 80px 1fr auto;
-  gap: 2rem;
-  padding: 2rem 0;
-  border-bottom: 1px solid var(--border);
-  align-items: center;
-  
-  &:last-child { border-bottom: none; }
-  
-  .item-img-placeholder {
-    width: 80px; height: 100px;
-    background: var(--ivory);
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    color: #ccc;
-    svg { width: 32px; height: 32px; }
-  }
-  
-  .item-info {
-    .item-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--midnight);
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-    .item-variants {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-  }
-  
-  .item-price-qty {
-    text-align: right;
-    .item-total { font-weight: 800; font-size: 1.1rem; color: var(--midnight); }
-    .item-qty { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
-  }
-}
-
-.summary-details {
+/* --- Status Stepper --- */
+.status-tracker {
   display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  
-  .summary-row {
+  justify-content: space-between;
+  align-items: center;
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+
+  .step {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--muted);
-    
-    .label { font-weight: 600; color: var(--muted); }
-    .value { font-weight: 700; color: var(--midnight); }
-    
-    &.total-row {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 2px solid var(--border);
-      font-size: 1.4rem;
-      color: var(--midnight);
-      .label, .value { font-weight: 900; }
+    position: relative;
+    z-index: 1;
+
+    .step-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--ivory);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+      margin-bottom: 0.75rem;
     }
+
+    .step-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    &.active {
+      .step-icon { border-color: var(--midnight); color: var(--midnight); background: #fff; }
+      .step-label { color: var(--midnight); }
+    }
+
+    &.completed {
+      .step-icon { background: var(--midnight); border-color: var(--midnight); color: #fff; }
+      .step-label { color: var(--midnight); }
+    }
+  }
+
+  .step-line {
+    flex: 2;
+    height: 2px;
+    background: var(--border);
+    margin-top: -1.75rem;
   }
 }
 
-.status-badge {
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  font-size: 0.8rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  
-  &.PENDING { background: #fffbeb; color: #b45309; }
-  &.PROCESSING { background: #eff6ff; color: #1d4ed8; }
-  &.SHIPPED { background: #f5f3ff; color: #6d28d9; }
-  &.DELIVERED { background: #f0fdf4; color: #15803d; }
-  &.CANCELLED { background: #fef2f2; color: #b91c1c; }
+.order-cancelled-notice {
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  font-weight: 500;
 }
 
-.shipping-card {
-  margin-top: 2rem;
-  background: var(--midnight);
-  color: #fff;
-  border: none;
-  
-  h3 { color: #fff; }
-  
-  .info-block {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+/* --- Invoice Paper --- */
+.invoice-paper {
+  background: var(--white);
+  padding: 4rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, var(--lebanese-red), var(--midnight));
+  }
+}
+
+.invoice-header {
+  display: none; /* Only for print */
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4rem;
+  border-bottom: 2px solid var(--midnight);
+  padding-bottom: 2rem;
+
+  .brand {
+    .cedar { font-size: 2.2rem; font-weight: 950; letter-spacing: -1px; color: var(--midnight); }
+    .co { font-size: 2.2rem; font-weight: 300; color: var(--lebanese-red); }
+    .brand-tagline { font-size: 0.8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 3px; }
+  }
+
+  .invoice-meta {
+    text-align: right;
+    h2 { font-weight: 900; letter-spacing: 4px; color: var(--midnight); margin-bottom: 0.5rem; }
+    p { color: var(--muted); font-weight: 600; font-size: 0.9rem; }
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+
+  @media(max-width: 768px) { grid-template-columns: 1fr; }
+
+  .info-group {
     label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: rgba(255,255,255,0.4);
       font-weight: 800;
-      margin-bottom: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
       display: block;
     }
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
-      font-weight: 500;
-      color: rgba(255,255,255,0.9);
+    p { font-size: 0.95rem; line-height: 1.6; color: var(--midnight); margin-bottom: 0.25rem; font-weight: 500; }
+  }
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 3rem;
+
+  th {
+    text-align: left;
+    padding: 1rem;
+    background: var(--ivory);
+    color: var(--midnight);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--midnight);
+  }
+
+  td {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    
+    .item-title { font-weight: 700; color: var(--midnight); font-size: 1.05rem; display: block; }
+    .item-meta { font-size: 0.85rem; color: var(--muted); font-weight: 500; margin-top: 0.25rem; gap: 0.75rem; display: flex; }
+  }
+
+  tfoot {
+    td {
+      border: none;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      
+      &.text-right { font-weight: 700; color: var(--midnight); }
+    }
+    .total-row {
+      td {
+        padding-top: 1.5rem;
+        font-size: 1.25rem;
+        color: var(--midnight);
+        border-top: 2px solid var(--midnight);
+        font-weight: 900;
+      }
     }
   }
+}
+
+.invoice-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  p { font-weight: 600; color: var(--midnight); margin-bottom: 0.25rem; }
+  .small { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+}
+
+.badge-sm {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  text-transform: uppercase;
   
-  .payment-info {
-    .payment-status {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      &.PAID { background: rgba(0,168,80,0.2); color: var(--lebanese-green); }
-      &.UNPAID { background: rgba(238,22,31,0.2); color: var(--lebanese-red); }
-    }
+  &.PENDING { background: #fff7ed; color: #c2410c; }
+  &.CONFIRMED { background: #f0fdf4; color: #15803d; }
+  &.PAID { background: #f0fdf4; color: #15803d; }
+  &.UNPAID { background: #fef2f2; color: #b91c1c; }
+}
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* --- Print Handling --- */
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: flex !important; }
+  
+  body { background: white !important; }
+  .order-detail-page { padding: 0; }
+  .container { width: 100%; max-width: none; }
+  .invoice-paper {
+    box-shadow: none;
+    border: none;
+    padding: 0;
   }
+  .invoice-header { display: flex !important; }
+  
+  .invoice-paper::before { display: none; }
 }

@@ -1,11 +1,17 @@
 <div class="order-detail-page">
   <div class="container">
-    <div class="order-header">
+    <div class="order-header no-print">
       <div>
         <span class="section-label">Order History</span>
         <h1 class="section-title">Order #{{ order?.id }}</h1>
       </div>
-      <a routerLink="/account" class="btn btn-outline btn-sm">← Back to Orders</a>
+      <div class="header-actions">
+        <button class="btn btn-outline btn-sm" (click)="window.print()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print Invoice
+        </button>
+        <a routerLink="/account" class="btn btn-outline btn-sm">← My Orders</a>
+      </div>
     </div>
 
     <!-- Loading UI -->
@@ -18,90 +24,127 @@
       <p>{{ error }}</p>
     </div>
 
-    <div class="order-layout" *ngIf="!loading && !error && order">
+    <div class="order-content" *ngIf="!loading && !error && order">
       
-      <!-- Left Column: Items List -->
-      <div class="items-card">
-        <h2>Items Purchased</h2>
-        
-        <div *ngFor="let item of order.items" class="item-row">
-          <div class="item-img-placeholder">
-             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
-          
-          <div class="item-info">
-            <span class="item-name">{{ item.productName }}</span>
-            <div class="item-variants">
-              <span *ngIf="item.size">Size: {{ item.size }}</span>
-              <span *ngIf="item.color">Color: {{ item.color }}</span>
-            </div>
-          </div>
-          
-          <div class="item-price-qty">
-            <p class="item-total">${{ item.unitPrice | number:'1.2-2' }}</p>
-            <p class="item-qty">Quantity: {{ item.quantity }}</p>
-          </div>
+      <!-- Status Stepper (Hidden on Print if Cancelled, else shown) -->
+      <div class="status-tracker no-print" *ngIf="order.status !== 'CANCELLED'">
+        <div class="step" [class.active]="['PENDING','CONFIRMED','PROCESSING','SHIPPED','DELIVERED'].includes(order.status)" [class.completed]="['CONFIRMED','PROCESSING','SHIPPED','DELIVERED'].includes(order.status)">
+          <div class="step-icon">1</div>
+          <span class="step-label">Pending</span>
         </div>
-        <div *ngIf="order.items?.length === 0" class="no-orders">No items found in this order.</div>
+        <div class="step-line"></div>
+        <div class="step" [class.active]="['CONFIRMED','PROCESSING','SHIPPED','DELIVERED'].includes(order.status)" [class.completed]="['PROCESSING','SHIPPED','DELIVERED'].includes(order.status)">
+          <div class="step-icon">2</div>
+          <span class="step-label">Confirmed</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.active]="['PROCESSING','SHIPPED','DELIVERED'].includes(order.status)" [class.completed]="['SHIPPED','DELIVERED'].includes(order.status)">
+          <div class="step-icon">3</div>
+          <span class="step-label">Processing</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.active]="['SHIPPED','DELIVERED'].includes(order.status)" [class.completed]="['DELIVERED'].includes(order.status)">
+          <div class="step-icon">4</div>
+          <span class="step-label">Shipped</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" [class.active]="order.status === 'DELIVERED'" [class.completed]="order.status === 'DELIVERED'">
+          <div class="step-icon">5</div>
+          <span class="step-label">Delivered</span>
+        </div>
       </div>
 
-      <!-- Right Column: Summary & Info -->
-      <div class="summary-info">
-        
-        <!-- Summary Card -->
-        <div class="summary-card">
-          <h3>Order Summary</h3>
-          
-          <div class="summary-details">
-            <div class="summary-row">
-              <span class="label">Date Placed</span>
-              <span class="value">{{ order.createdAt | date:'mediumDate' }}</span>
-            </div>
-            
-            <div class="summary-row">
-              <span class="label">Status</span>
-              <span class="status-badge" [ngClass]="order.status">
-                {{ order.status }}
-              </span>
-            </div>
+      <div class="order-cancelled-notice no-print" *ngIf="order.status === 'CANCELLED'">
+        <p>This order was <strong>Cancelled</strong>. If you have questions, please contact support.</p>
+      </div>
 
-            <div class="summary-row">
-              <span class="label">Subtotal</span>
-              <span class="value">${{ order.subtotal | number:'1.2-2' }}</span>
-            </div>
-            
-            <div class="summary-row" *ngIf="order.discount > 0">
-              <span class="label">Discount</span>
-              <span class="value" style="color:var(--lebanese-red);">-${{ order.discount | number:'1.2-2' }}</span>
-            </div>
-
-            <div class="summary-row total-row">
-              <span class="label">Total</span>
-              <span class="value">${{ order.total | number:'1.2-2' }}</span>
-            </div>
-          </div>
+      <!-- Invoice Layout -->
+      <div class="invoice-paper">
+        <!-- Receipt Header (Shown on Print) -->
+        <div class="print-only invoice-header">
+           <div class="brand">
+             <span class="cedar">CEDAR</span><span class="co">&CO.</span>
+             <p class="brand-tagline">Woven from the Land of Cedars</p>
+           </div>
+           <div class="invoice-meta">
+             <h2>INVOICE</h2>
+             <p>Order ID: #{{ order.id }}</p>
+             <p>Date: {{ order.createdAt | date:'mediumDate' }}</p>
+           </div>
         </div>
 
-        <!-- Shipping & Payment Card -->
-        <div class="shipping-card">
-           <h3>Shipping & Payment</h3>
-           
-           <div class="info-block">
-             <label>Delivery Address</label>
-             <p>
-               {{ order.shippingStreet }}<br/>
-               {{ order.shippingCity }}, {{ order.shippingRegion }}<br/>
-               {{ order.shippingCountry }}
-             </p>
-           </div>
-           
-           <div class="info-block payment-info">
-             <label>Payment Details</label>
-             <p>Method: <strong>{{ order.paymentMethod.replace('_', ' ') }}</strong></p>
-             <span class="payment-status" [ngClass]="order.paymentStatus">
-                {{ order.paymentStatus }}
-             </span>
-           </div>
+        <div class="invoice-sections">
+          <!-- Billing/Shipping Block -->
+          <div class="info-grid">
+            <div class="info-group">
+              <label>Customer Details</label>
+              <p><strong>{{ order.userFirstName }} {{ order.userLastName }}</strong></p>
+              <p>{{ order.userEmail }}</p>
+              <p>{{ order.userPhone }}</p>
+            </div>
+            
+            <div class="info-group">
+              <label>Shipping Address</label>
+              <p>{{ order.shippingStreet }}</p>
+              <p>{{ order.shippingCity }}, {{ order.shippingRegion }}</p>
+              <p>{{ order.shippingCountry }}</p>
+            </div>
+
+            <div class="info-group">
+              <label>Payment & Status</label>
+              <p>Method: <strong>{{ order.paymentMethod.replace('_', ' ') }}</strong></p>
+              <p>Payment: <span class="badge-sm" [ngClass]="order.paymentStatus">{{ order.paymentStatus }}</span></p>
+              <p>Order: <span class="badge-sm" [ngClass]="order.status">{{ order.status }}</span></p>
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th class="text-center">Qty</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.items">
+                <td>
+                  <span class="item-title">{{ item.productName }}</span>
+                  <div class="item-meta">
+                    <span *ngIf="item.size">Size: {{ item.size }}</span>
+                    <span *ngIf="item.color">Color: {{ item.color }}</span>
+                  </div>
+                </td>
+                <td class="text-center">{{ item.quantity }}</td>
+                <td class="text-right">${{ item.unitPrice | number:'1.2-2' }}</td>
+                <td class="text-right">${{ (item.unitPrice * item.quantity) | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2"></td>
+                <td class="text-right">Subtotal</td>
+                <td class="text-right">${{ order.subtotal | number:'1.2-2' }}</td>
+              </tr>
+              <tr *ngIf="order.discount > 0">
+                <td colspan="2"></td>
+                <td class="text-right">Discount</td>
+                <td class="text-right" style="color:var(--lebanese-red);">-${{ order.discount | number:'1.2-2' }}</td>
+              </tr>
+              <tr class="total-row">
+                <td colspan="2"></td>
+                <td class="text-right">Total</td>
+                <td class="text-right">${{ order.total | number:'1.2-2' }}</td>
+              </tr>
+            </tfoot>
+          </table>
+          
+          <div class="invoice-footer">
+            <p>Thank you for choosing Cedar & Co.</p>
+            <p class="small">This is a system-generated invoice.</p>
+          </div>
         </div>
       </div>
 

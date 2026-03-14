@@ -30,12 +30,20 @@
         <h3>Recent Orders</h3>
         <div *ngIf="orders.length > 0">
           <div *ngFor="let o of orders" class="order-item">
-            <div class="order-details">
-              <span class="order-id">Order #{{ o.id }}</span>
-              <span class="order-status">{{ o.status }}</span>
-              <p class="order-total">Total: ${{ o.total | number:'1.2-2' }}</p>
+            <div class="order-main">
+              <div class="order-id-group">
+                <span class="order-id">#{{ o.id }}</span>
+                <span class="order-date">{{ o.createdAt | date:'shortDate' }}</span>
+              </div>
+              <div class="order-status-group">
+                <span class="status-badge" [ngClass]="o.status">{{ o.status }}</span>
+                <span class="payment-badge" [ngClass]="o.paymentStatus">{{ o.paymentStatus }}</span>
+              </div>
             </div>
-            <a [routerLink]="['/account/orders', o.id]" class="btn btn-outline btn-sm">View Details</a>
+            <div class="order-meta">
+              <span class="order-total-val">${{ o.total | number:'1.2-2' }}</span>
+              <a [routerLink]="['/account/orders', o.id]" class="view-link">View Details</a>
+            </div>
           </div>
         </div>
         <div *ngIf="orders.length === 0" class="no-orders">

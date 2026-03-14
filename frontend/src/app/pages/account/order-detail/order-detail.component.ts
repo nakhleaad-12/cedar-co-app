@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./order-detail.component.scss']
 })
 export class OrderDetailComponent implements OnInit {
+  window = window;
   order: any = null;
   loading = true;
   error = '';
