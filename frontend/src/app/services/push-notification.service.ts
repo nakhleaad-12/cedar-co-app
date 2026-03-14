@@ -41,7 +41,9 @@ export class PushNotificationService {
       }
       const permission = await Notification.requestPermission();
       this.debugStatusSubject.next(`Permission: ${permission}`);
-      if (permission === 'granted') {
+      if (permission === 'denied') {
+        this.debugStatusSubject.next('Permission: denied (Please Reset in iPhone Settings -> Cedar & Co -> Notifications)');
+      } else if (permission === 'granted') {
         await this.registerAndGetToken();
       }
     } catch (error: any) {
