@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class PushNotificationService {
   private messaging: any;
-  private tokenSubject = new BehaviorSubject<string | null>(null);
+  public tokenSubject = new BehaviorSubject<string | null>(null);
   private debugStatusSubject = new BehaviorSubject<string>('Initializing...');
   token$ = this.tokenSubject.asObservable();
   debugStatus$ = this.debugStatusSubject.asObservable();
@@ -116,5 +116,23 @@ export class PushNotificationService {
         });
       }
     });
+  }
+
+  unsubscribe() {
+    const token = this.tokenSubject.value;
+    if (token) {
+      this.http.delete(`${environment.apiUrl}/notifications/tokens/${token}`).subscribe({
+        next: () => {
+          console.log('Token deleted from backend');
+          this.tokenSubject.next(null);
+          this.debugStatusSubject.next('Notifications: Disabled');
+        },
+        error: (err) => {
+          console.error('Failed to delete token', err);
+          // Still clear local state so the UI reflects the change
+          this.tokenSubject.next(null);
+        }
+      });
+    }
   }
 }

@@ -64,7 +64,10 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleNotifications(): void {
-    // We call requestPermission which handles the prompt if needed
-    this.push.requestPermission();
+    if (this.push.tokenSubject.value) {
+      this.push.unsubscribe();
+    } else {
+      this.push.requestPermission();
+    }
   }
 }
