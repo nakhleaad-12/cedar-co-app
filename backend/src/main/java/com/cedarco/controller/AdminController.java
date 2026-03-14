@@ -80,10 +80,21 @@ public class AdminController {
         return ResponseEntity.ok(orderService.updatePaymentStatus(id, req.getPaymentStatus()));
     }
 
-    // ─── Customers ─────────────────────────────────────────────
     @GetMapping("/customers")
-    public ResponseEntity<?> getCustomers() {
-        return ResponseEntity.ok(userRepository.findAll());
+    public ResponseEntity<List<com.cedarco.dto.UserDto.Response>> getCustomers() {
+        List<com.cedarco.dto.UserDto.Response> responses = userRepository.findAll().stream().map(u -> {
+            com.cedarco.dto.UserDto.Response r = new com.cedarco.dto.UserDto.Response();
+            r.setId(u.getId());
+            r.setFirstName(u.getFirstName());
+            r.setLastName(u.getLastName());
+            r.setEmail(u.getEmail());
+            r.setPhone(u.getPhone());
+            r.setRole(u.getRole().name());
+            r.setActive(u.isActive());
+            r.setCreatedAt(u.getCreatedAt());
+            return r;
+        }).collect(java.util.stream.Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 
     // ─── Coupons ───────────────────────────────────────────────

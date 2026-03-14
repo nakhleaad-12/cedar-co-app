@@ -1,0 +1,51 @@
+<div class="admin-page">
+  <div class="container">
+    <div class="admin-header">
+      <h1 class="section-title">Customers</h1>
+      <div style="display:flex; gap:0.75rem; align-items:center;">
+        <span style="color:var(--muted); font-size:0.9rem;">{{ customers.length }} total users</span>
+        <button class="btn btn-outline" (click)="loadCustomers()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="loading">Loading customers…</div>
+
+    <div class="table-wrapper" *ngIf="!loading && customers.length > 0">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Joined</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of customers">
+            <td><strong>#{{ user.id }}</strong></td>
+            <td><strong>{{ user.firstName }} {{ user.lastName }}</strong></td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone || '—' }}</td>
+            <td>
+              <span class="badge" [class.badge-admin]="user.role === 'ADMIN'" [class.badge-customer]="user.role === 'CUSTOMER'">
+                {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <span class="status-dot" [class.active]="user.active"></span>
+              {{ user.active ? 'Active' : 'Inactive' }}
+            </td>
+            <td>{{ formatDate(user.createdAt) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty" *ngIf="!loading && customers.length === 0">
+      <p>No customers found.</p>
+    </div>
+  </div>
+</div>

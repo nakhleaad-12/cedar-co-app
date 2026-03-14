@@ -34,6 +34,7 @@ import { OrderDetailComponent } from './pages/account/order-detail/order-detail.
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 import { AdminProductsComponent } from './pages/admin/admin-products/admin-products.component';
 import { AdminOrdersComponent } from './pages/admin/admin-orders/admin-orders.component';
+import { AdminCustomersComponent } from './pages/admin/admin-customers/admin-customers.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
@@ -60,6 +61,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     AdminDashboardComponent,
     AdminProductsComponent,
     AdminOrdersComponent,
+    AdminCustomersComponent,
     NotFoundComponent,
   ],
   imports: [

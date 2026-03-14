@@ -16,6 +16,7 @@ import { OrderDetailComponent } from './pages/account/order-detail/order-detail.
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 import { AdminProductsComponent } from './pages/admin/admin-products/admin-products.component';
 import { AdminOrdersComponent } from './pages/admin/admin-orders/admin-orders.component';
+import { AdminCustomersComponent } from './pages/admin/admin-customers/admin-customers.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard, AdminGuard, CustomerGuard } from './guards/auth.guard';
 
@@ -40,6 +41,7 @@ const routes: Routes = [
       { path: '', component: AdminDashboardComponent },
       { path: 'products', component: AdminProductsComponent },
       { path: 'orders', component: AdminOrdersComponent },
+      { path: 'customers', component: AdminCustomersComponent },
     ]
   },
   { path: '**', component: NotFoundComponent }
