@@ -20,6 +20,7 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final CouponRepository couponRepository;
+    private final FcmService fcmService;
 
     @Transactional
     public OrderDto.Response placeOrder(Long userId, OrderDto.CreateRequest req) {
@@ -81,6 +82,9 @@ public class OrderService {
 
         Order saved = orderRepository.save(order);
 
+        // Notify user
+        fcmService.sendOrderNotification(user, "Order Placed!", "Thank you for your order #" + saved.getId(), saved.getId());
+
         // Clear cart after order
         cart.getItems().clear();
         cartRepository.save(cart);
@@ -109,7 +113,16 @@ public class OrderService {
         Order o = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         o.setStatus(Order.OrderStatus.valueOf(status));
-        return toResponse(orderRepository.save(o));
+        Order saved = orderRepository.save(o);
+
+        // Notify user
+        if (o.getUser() != null) {
+            String title = "Order Update";
+            String body = "Your order #" + o.getId() + " is now " + status;
+            fcmService.sendOrderNotification(o.getUser(), title, body, o.getId());
+        }
+
+        return toResponse(saved);
     }
 
     @Transactional
