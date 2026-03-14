@@ -11,7 +11,9 @@ import { PushNotificationService } from '../../services/push-notification.servic
 export class AccountComponent implements OnInit {
   user: AuthUser | null = null;
   orders: any[] = [];
-  constructor(private auth: AuthService, private http: HttpClient) {
+  fcmToken$: any;
+  constructor(private auth: AuthService, private http: HttpClient, private push: PushNotificationService) {
+    this.fcmToken$ = this.push.token$;
   }
   ngOnInit(): void {
     this.auth.currentUser$.subscribe(u => {
@@ -32,5 +34,8 @@ export class AccountComponent implements OnInit {
         this.orders = [];
       }
     });
+  }
+  enableNotifications() {
+    this.push.requestPermission();
   }
 }

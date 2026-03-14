@@ -91,25 +91,13 @@ public class FcmService {
             try {
                 log.info("Attempting to send FCM message to token: {}...", fcmToken.getToken().substring(0, Math.min(10, fcmToken.getToken().length())));
                 
-                com.google.firebase.messaging.WebpushConfig webpushConfig = com.google.firebase.messaging.WebpushConfig.builder()
-                        .setNotification(com.google.firebase.messaging.WebpushNotification.builder()
-                                .setTitle(title)
-                                .setBody(body)
-                                .setIcon("/assets/icons/icon-72x72.png")
-                                .setVibrate(new int[]{200, 100, 200})
-                                .build())
-                        .setFcmOptions(com.google.firebase.messaging.WebpushFcmOptions.builder()
-                                .setLink("https://cedar-co-app.vercel.app/account")
-                                .build())
-                        .build();
-
                 Message message = Message.builder()
                         .setToken(fcmToken.getToken())
                         .setNotification(Notification.builder()
                                 .setTitle(title)
                                 .setBody(body)
                                 .build())
-                        .setWebpushConfig(webpushConfig)
+                        .setWebpushConfig(createWebpushConfig(title, body, "https://cedar-co-app.vercel.app/account"))
                         .putData("orderId", String.valueOf(orderId))
                         .build();
 
@@ -137,30 +125,38 @@ public class FcmService {
 
         for (FcmToken fcmToken : allTokens) {
             try {
-                com.google.firebase.messaging.WebpushConfig webpushConfig = com.google.firebase.messaging.WebpushConfig.builder()
-                        .setNotification(com.google.firebase.messaging.WebpushNotification.builder()
-                                .setTitle(title)
-                                .setBody(body)
-                                .setIcon("/assets/icons/icon-72x72.png")
-                                .build())
-                        .setFcmOptions(com.google.firebase.messaging.WebpushFcmOptions.builder()
-                                .setLink("https://cedar-co-app.vercel.app/shop")
-                                .build())
-                        .build();
-
                 Message message = Message.builder()
                         .setToken(fcmToken.getToken())
                         .setNotification(Notification.builder()
                                 .setTitle(title)
                                 .setBody(body)
                                 .build())
-                        .setWebpushConfig(webpushConfig)
+                        .setWebpushConfig(createWebpushConfig(title, body, "https://cedar-co-app.vercel.app/shop"))
                         .build();
 
-                FirebaseMessaging.getInstance().sendAsync(message);
+                String response = FirebaseMessaging.getInstance().send(message);
+                log.info("Broadcast sent to token {}. Response: {}", fcmToken.getToken().substring(0, 10), response);
             } catch (Exception e) {
                 log.error("Failed to send broadcast to token: {}, Error: {}", fcmToken.getToken(), e.getMessage());
+                if (e.getMessage() != null && (e.getMessage().contains("registration-token-not-registered") || e.getMessage().contains("invalid-registration-token"))) {
+                    log.info("Cleaning up invalid token...");
+                    fcmTokenRepository.delete(fcmToken);
+                }
             }
         }
+    }
+
+    private com.google.firebase.messaging.WebpushConfig createWebpushConfig(String title, String body, String link) {
+        return com.google.firebase.messaging.WebpushConfig.builder()
+                .setNotification(com.google.firebase.messaging.WebpushNotification.builder()
+                        .setTitle(title)
+                        .setBody(body)
+                        .setIcon("/assets/icons/icon-72x72.png")
+                        .setVibrate(new int[]{200, 100, 200})
+                        .build())
+                .setFcmOptions(com.google.firebase.messaging.WebpushFcmOptions.builder()
+                        .setLink(link)
+                        .build())
+                .build();
     }
 }

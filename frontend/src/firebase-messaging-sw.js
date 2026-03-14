@@ -16,9 +16,13 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  if (!payload.notification) return;
-
-  const notificationTitle = payload.notification.title || 'New Notification';
+  
+  // If the payload has a 'notification' property, the browser shows it automatically.
+  // We ONLY show it manually if it's a data-only message from FCM.
+  if (payload.notification) {
+    console.log('Background: Browser will handle notification display.');
+    return;
+  }
   const notificationOptions = {
     body: payload.notification.body || '',
     icon: '/assets/icons/icon-72x72.png',
