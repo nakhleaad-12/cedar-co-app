@@ -98,7 +98,7 @@ export class PushNotificationService {
             vibrate: [100, 50, 100],
             data: payload.data,
             tag: 'order-notification' // Prevents duplicate notifications
-          });
+          } as any);
         });
       }
     });
