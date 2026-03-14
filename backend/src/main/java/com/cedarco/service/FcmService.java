@@ -80,13 +80,16 @@ public class FcmService {
 
     public void sendOrderNotification(User user, String title, String body, Long orderId) {
         if (FirebaseApp.getApps().isEmpty()) {
-            log.debug("Firebase not initialized, skipping notification to user {}", user.getEmail());
+            log.warn("CANNOT SEND NOTIFICATION: Firebase is NOT initialized. Check your FIREBASE_CONFIG_JSON or service account key.");
             return;
         }
 
         List<FcmToken> tokens = fcmTokenRepository.findByUser(user);
+        log.info("Found {} tokens for user {}", tokens.size(), user.getEmail());
+        
         for (FcmToken fcmToken : tokens) {
             try {
+                log.info("Attempting to send FCM message to token: {}...", fcmToken.getToken().substring(0, Math.min(10, fcmToken.getToken().length())));
                 Message message = Message.builder()
                         .setToken(fcmToken.getToken())
                         .setNotification(Notification.builder()
@@ -94,14 +97,14 @@ public class FcmService {
                                 .setBody(body)
                                 .build())
                         .putData("orderId", String.valueOf(orderId))
-                        .putData("click_action", "FLUTTER_NOTIFICATION_CLICK") // For mobile, but good to have
                         .build();
 
                 String response = FirebaseMessaging.getInstance().send(message);
-                log.info("Successfully sent message: " + response);
+                log.info("Successfully sent message! Firebase response: {}", response);
             } catch (Exception e) {
-                log.error("Failed to send FCM message to token: {}, Error: {}", fcmToken.getToken(), e.getMessage());
-                if (e.getMessage().contains("registration-token-not-registered")) {
+                log.error("CRITICAL: Failed to send FCM message. Error: {}", e.getMessage());
+                if (e.getMessage() != null && e.getMessage().contains("registration-token-not-registered")) {
+                    log.info("Token is invalid, removing from database.");
                     fcmTokenRepository.delete(fcmToken);
                 }
             }

@@ -36,6 +36,19 @@ public class NotificationController {
         }
     }
 
+    @PostMapping("/test-push")
+    public ResponseEntity<?> testPush(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
+        
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        log.info("Triggering test push notification for user: {}", user.getEmail());
+        fcmService.sendOrderNotification(user, "Test Notification", "This is a test notification from Cedar & Co.", 0L);
+        
+        return ResponseEntity.ok("Test push triggered. Check server logs for delivery status.");
+    }
+
     @DeleteMapping("/tokens/{token}")
     public ResponseEntity<?> deleteToken(@PathVariable String token) {
         fcmService.deleteToken(token);
