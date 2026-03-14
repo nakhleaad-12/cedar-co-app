@@ -26,6 +26,15 @@
 
     <div class="order-content" *ngIf="!loading && !error && order">
       
+      <!-- Order Map Tracker (Tier 1) -->
+      <div class="map-tracker-section no-print" *ngIf="order.status !== 'CANCELLED'">
+        <div class="map-header">
+          <span class="badge-live">Live Tracker</span>
+          <h2>Delivery Progress</h2>
+        </div>
+        <div id="order-map" class="map-container"></div>
+      </div>
+      
       <!-- Status Stepper (Hidden on Print if Cancelled, else shown) -->
       <div class="status-tracker no-print" *ngIf="order.status !== 'CANCELLED'">
         <div class="step" [class.active]="['PENDING','CONFIRMED','PROCESSING','SHIPPED','DELIVERED'].includes(order.status)" [class.completed]="['CONFIRMED','PROCESSING','SHIPPED','DELIVERED'].includes(order.status)">

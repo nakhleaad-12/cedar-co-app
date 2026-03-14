@@ -15,6 +15,67 @@
   .header-actions { display: flex; gap: 0.75rem; }
 }
 
+/* --- Map Tracker --- */
+.map-tracker-section {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+
+  .map-header {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+
+    h2 {
+      font-family: var(--font-head);
+      font-size: 1.25rem;
+      color: var(--midnight);
+      margin: 0;
+      font-weight: 800;
+    }
+
+    .badge-live {
+      background: rgba(238,22,31,0.1);
+      color: var(--lebanese-red);
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: var(--lebanese-red);
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
+      }
+    }
+  }
+
+  .map-container {
+    height: 350px;
+    width: 100%;
+    z-index: 10;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 /* --- Status Stepper --- */
 .status-tracker {
   display: flex;
