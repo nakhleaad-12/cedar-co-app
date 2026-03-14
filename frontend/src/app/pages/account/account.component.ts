@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService, AuthUser } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
+import { PushNotificationService } from '../../services/push-notification.service';
 @Component({ 
   selector: 'app-account', 
   templateUrl: './account.component.html',
@@ -10,7 +11,10 @@ import { environment } from '../../../environments/environment';
 export class AccountComponent implements OnInit {
   user: AuthUser | null = null;
   orders: any[] = [];
-  constructor(private auth: AuthService, private http: HttpClient) {}
+  fcmToken$: any;
+  constructor(private auth: AuthService, private http: HttpClient, private push: PushNotificationService) {
+    this.fcmToken$ = this.push.token$;
+  }
   ngOnInit(): void {
     this.auth.currentUser$.subscribe(u => {
       this.user = u;
@@ -33,6 +37,9 @@ export class AccountComponent implements OnInit {
   }
 
   sendTestPush(): void {
+    // Explicitly ask for permission again (needed for iOS standalone)
+    this.push.requestPermission();
+    
     this.http.get(`${environment.apiUrl}/notifications/test-push`, { responseType: 'text' }).subscribe({
       next: (res) => alert('Test Push Triggered! Check your device. If nothing appears, check browser notification permission.'),
       error: (err) => console.error('Test push failed:', err)

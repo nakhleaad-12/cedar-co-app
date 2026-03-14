@@ -25,17 +25,20 @@ export class PushNotificationService {
     }
   }
 
-  requestPermission() {
+  async requestPermission() {
     if (!this.messaging) return;
 
-    Notification.requestPermission().then((permission) => {
+    try {
+      const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         console.log('Notification permission granted.');
-        this.registerAndGetToken();
+        await this.registerAndGetToken();
       } else {
-        console.warn('Unable to get permission to notify.');
+        console.warn('Notification permission denied:', permission);
       }
-    });
+    } catch (error) {
+      console.error('Error requesting notification permission:', error);
+    }
   }
 
   private async registerAndGetToken() {
