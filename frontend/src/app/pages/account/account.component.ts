@@ -11,11 +11,7 @@ import { PushNotificationService } from '../../services/push-notification.servic
 export class AccountComponent implements OnInit {
   user: AuthUser | null = null;
   orders: any[] = [];
-  fcmToken$: any;
-  debugStatus$: any;
-  constructor(private auth: AuthService, private http: HttpClient, private push: PushNotificationService) {
-    this.fcmToken$ = this.push.token$;
-    this.debugStatus$ = this.push.debugStatus$;
+  constructor(private auth: AuthService, private http: HttpClient) {
   }
   ngOnInit(): void {
     this.auth.currentUser$.subscribe(u => {
@@ -35,16 +31,6 @@ export class AccountComponent implements OnInit {
         console.log('No user loaded in AccountComponent');
         this.orders = [];
       }
-    });
-  }
-
-  sendTestPush(): void {
-    // Explicitly ask for permission again (needed for iOS standalone)
-    this.push.requestPermission();
-    
-    this.http.get(`${environment.apiUrl}/notifications/test-push`, { responseType: 'text' }).subscribe({
-      next: (res) => alert('Test Push Triggered! Check your device. If nothing appears, check browser notification permission.'),
-      error: (err) => console.error('Test push failed:', err)
     });
   }
 }

@@ -55,8 +55,32 @@ public class NotificationController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/broadcast")
+    public ResponseEntity<?> broadcast(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BroadcastRequest request) {
+        if (userDetails == null) return ResponseEntity.status(401).body("Unauthenticated");
+        
+        // Security check is also handled by SecurityConfig, but extra check here
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        if (user.getRole() != User.Role.ADMIN) {
+            return ResponseEntity.status(403).body("Only Admins can broadcast notifications");
+        }
+
+        log.info("Admin {} is triggering a global broadcast: {}", user.getEmail(), request.getTitle());
+        fcmService.broadcastNotification(request.getTitle(), request.getBody());
+        
+        return ResponseEntity.ok("Broadcast triggered successfully.");
+    }
+
     @Data
     public static class TokenRequest {
         private String token;
+    }
+
+    @Data
+    public static class BroadcastRequest {
+        private String title;
+        private String body;
     }
 }

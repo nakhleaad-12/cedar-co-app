@@ -22,20 +22,16 @@
             <label>Account Role</label>
             <span>{{ user.role }}</span>
           </div>
-          <button (click)="sendTestPush()" class="btn btn-outline btn-sm" style="margin-top: 1.5rem; width: 100%;">
-            Send Test Notification
-          </button>
-          
-          <div class="debug-info" style="margin-top: 1rem; font-size: 0.7rem; color: #666; word-break: break-all;">
-            <strong>Notification Status:</strong> 
-            <span *ngIf="fcmToken$ | async as token">Connected ✅</span>
-            <span *ngIf="!(fcmToken$ | async)">Not Connected ❌</span>
-            <div style="margin-top: 0.5rem; border-top: 1px solid #eee; padding-top: 0.5rem;">
-              <strong>Step:</strong> {{ debugStatus$ | async }}
-            </div>
-          </div>
         </div>
       </div>
+      <div class="account-card p-6">
+          <h2 class="text-xl font-heading mb-4">Account Settings</h2>
+          <p class="text-secondary mb-6">Manage your profile and preferences.</p>
+          <div class="space-y-4">
+            <button class="btn btn-outline btn-sm w-full">Change Password</button>
+            <button class="btn btn-outline btn-sm w-full">Edit Profile</button>
+          </div>
+        </div>
 
       <!-- Orders Section -->
       <div class="orders-card">

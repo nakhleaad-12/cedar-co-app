@@ -124,4 +124,43 @@ public class FcmService {
             }
         }
     }
+
+    @Transactional(readOnly = true)
+    public void broadcastNotification(String title, String body) {
+        if (FirebaseApp.getApps().isEmpty()) {
+            log.warn("CANNOT BROADCAST: Firebase not initialized.");
+            return;
+        }
+
+        List<FcmToken> allTokens = fcmTokenRepository.findAll();
+        log.info("Broadcasting message to {} device(s)", allTokens.size());
+
+        for (FcmToken fcmToken : allTokens) {
+            try {
+                com.google.firebase.messaging.WebpushConfig webpushConfig = com.google.firebase.messaging.WebpushConfig.builder()
+                        .setNotification(com.google.firebase.messaging.WebpushNotification.builder()
+                                .setTitle(title)
+                                .setBody(body)
+                                .setIcon("/assets/icons/icon-72x72.png")
+                                .build())
+                        .setFcmOptions(com.google.firebase.messaging.WebpushFcmOptions.builder()
+                                .setLink("https://cedar-co-app.vercel.app/shop")
+                                .build())
+                        .build();
+
+                Message message = Message.builder()
+                        .setToken(fcmToken.getToken())
+                        .setNotification(Notification.builder()
+                                .setTitle(title)
+                                .setBody(body)
+                                .build())
+                        .setWebpushConfig(webpushConfig)
+                        .build();
+
+                FirebaseMessaging.getInstance().sendAsync(message);
+            } catch (Exception e) {
+                log.error("Failed to send broadcast to token: {}, Error: {}", fcmToken.getToken(), e.getMessage());
+            }
+        }
+    }
 }
