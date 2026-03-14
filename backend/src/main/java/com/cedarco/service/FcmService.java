@@ -60,17 +60,44 @@ public class FcmService {
 
     @Transactional
     public void saveToken(User user, String token) {
+        // 1. Exact match check
         Optional<FcmToken> existing = fcmTokenRepository.findByToken(token);
         if (existing.isPresent()) {
             FcmToken fToken = existing.get();
             fToken.setUser(user);
+            fToken.setCreatedAt(java.time.LocalDateTime.now()); // Update last seen
             fcmTokenRepository.save(fToken);
-        } else {
-            FcmToken fToken = new FcmToken();
-            fToken.setUser(user);
-            fToken.setToken(token);
-            fcmTokenRepository.save(fToken);
+            return;
         }
+
+        // 2. Deduplication: Check if user has a very similar token (likely same device instance)
+        // FCM tokens for the same browser instance often share a long prefix
+        String prefix = token.substring(0, Math.min(token.length(), 32));
+        List<FcmToken> userTokens = fcmTokenRepository.findByUser(user);
+        
+        for (FcmToken ut : userTokens) {
+            if (ut.getToken().startsWith(prefix) || token.startsWith(ut.getToken().substring(0, Math.min(ut.getToken().length(), 32)))) {
+                log.info("Replacing similar token for user {} to avoid duplicates", user.getEmail());
+                ut.setToken(token);
+                ut.setCreatedAt(java.time.LocalDateTime.now());
+                fcmTokenRepository.save(ut);
+                return;
+            }
+        }
+
+        // 3. Capacity cleanup: Limit tokens per user to keep DB lean (max 5 devices)
+        if (userTokens.size() >= 5) {
+            log.info("User {} has reached token limit, removing oldest token", user.getEmail());
+            userTokens.stream()
+                .min(java.util.Comparator.comparing(FcmToken::getCreatedAt))
+                .ifPresent(fcmTokenRepository::delete);
+        }
+
+        // 4. Save as new device
+        FcmToken fToken = new FcmToken();
+        fToken.setUser(user);
+        fToken.setToken(token);
+        fcmTokenRepository.save(fToken);
     }
 
     @Transactional
