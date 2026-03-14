@@ -30,14 +30,26 @@ public class FcmService {
     @Value("${app.firebase-config-path:firebase-service-account.json}")
     private String firebaseConfigPath;
 
+    @Value("${FIREBASE_CONFIG_JSON:}")
+    private String firebaseConfigJson;
+
     @PostConstruct
     public void initialize() {
         try {
             if (FirebaseApp.getApps().isEmpty()) {
-                FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
-                FirebaseOptions options = FirebaseOptions.builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .build();
+                FirebaseOptions options;
+                if (firebaseConfigJson != null && !firebaseConfigJson.isEmpty()) {
+                    log.info("Initializing Firebase using FIREBASE_CONFIG_JSON environment variable");
+                    options = FirebaseOptions.builder()
+                            .setCredentials(GoogleCredentials.fromStream(new java.io.ByteArrayInputStream(firebaseConfigJson.getBytes())))
+                            .build();
+                } else {
+                    log.info("Initializing Firebase using file: {}", firebaseConfigPath);
+                    FileInputStream serviceAccount = new FileInputStream(firebaseConfigPath);
+                    options = FirebaseOptions.builder()
+                            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                            .build();
+                }
                 FirebaseApp.initializeApp(options);
                 log.info("Firebase application has been initialized");
             }
