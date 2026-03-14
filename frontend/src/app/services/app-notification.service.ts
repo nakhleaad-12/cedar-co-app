@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, interval } from 'rxjs';
-import { switchMap, tap, startWith, map } from 'rxjs/operators';
+import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { AuthService } from './auth.service';
 
 export interface AppNotification {
@@ -44,17 +45,34 @@ export class AppNotificationService {
   }
 
   fetchNotifications(page: number = 0, size: number = 10): Observable<AppNotification[]> {
+    console.log(`Fetching notifications: page=${page}, size=${size}`);
     return this.http.get<any>(`${environment.apiUrl}/notifications`, {
       params: { page: page.toString(), size: size.toString() }
     }).pipe(
-      map(resp => Array.isArray(resp) ? resp : (resp.content || [])),
-      tap(notifs => this.notificationsSubject.next(notifs))
+      map(resp => {
+        console.log('Notifications API raw response:', resp);
+        const data = Array.isArray(resp) ? resp : (resp.content || []);
+        console.log('Parsed notifications data:', data);
+        return data;
+      }),
+      tap(notifs => this.notificationsSubject.next(notifs)),
+      catchError(err => {
+        console.error('Error fetching notifications:', err);
+        return of([]);
+      })
     );
   }
 
   fetchUnreadCount(): Observable<number> {
     return this.http.get<number>(`${environment.apiUrl}/notifications/unread-count`).pipe(
-      tap(count => this.unreadCountSubject.next(count))
+      tap(count => {
+        console.log('Unread count response:', count);
+        this.unreadCountSubject.next(count);
+      }),
+      catchError(err => {
+        console.error('Error fetching unread count:', err);
+        return of(0);
+      })
     );
   }
 

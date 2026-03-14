@@ -151,7 +151,7 @@ public class FcmService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void broadcastNotification(String title, String body) {
         if (FirebaseApp.getApps().isEmpty()) {
             log.warn("CANNOT BROADCAST: Firebase not initialized.");
