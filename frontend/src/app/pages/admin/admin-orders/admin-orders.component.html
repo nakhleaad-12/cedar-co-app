@@ -41,7 +41,8 @@
           <tr *ngFor="let order of orders">
             <td><strong>#{{ order.id }}</strong></td>
             <td>
-              <div>{{ order.userEmail || '—' }}</div>
+              <div style="font-weight:600;">{{ order.userFirstName }} {{ order.userLastName }}</div>
+              <div style="font-size:0.8rem; color:var(--muted);">{{ order.userEmail || '—' }}</div>
             </td>
             <td>{{ formatDate(order.createdAt) }}</td>
             <td>

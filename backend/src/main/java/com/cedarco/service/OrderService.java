@@ -132,6 +132,11 @@ public class OrderService {
         r.setPaymentMethod(o.getPaymentMethod());
         r.setShippingCity(o.getShippingCity());
         r.setShippingCountry(o.getShippingCountry());
+        if (o.getUser() != null) {
+            r.setUserEmail(o.getUser().getEmail());
+            r.setUserFirstName(o.getUser().getFirstName());
+            r.setUserLastName(o.getUser().getLastName());
+        }
         r.setCreatedAt(o.getCreatedAt());
         r.setItems(o.getItems().stream().map(i -> {
             OrderDto.ItemResponse ir = new OrderDto.ItemResponse();

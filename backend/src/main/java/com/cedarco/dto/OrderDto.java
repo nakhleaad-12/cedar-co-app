@@ -33,6 +33,9 @@ public class OrderDto {
         private String shippingCity;
         private String shippingCountry;
         private List<ItemResponse> items;
+        private String userEmail;
+        private String userFirstName;
+        private String userLastName;
         private LocalDateTime createdAt;
     }
 
